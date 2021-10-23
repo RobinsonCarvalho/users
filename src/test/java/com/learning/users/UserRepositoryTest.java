@@ -1,6 +1,6 @@
 package com.learning.users;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.learning.users.model.User;
@@ -28,7 +28,7 @@ public class UserRepositoryTest {
 		userRepository.create(user);
 		userRepository.create(user1);
 		//then
-		Assert.assertEquals(2, userRepository.count());
+		Assertions.assertEquals(2, userRepository.count());
 	}
 	
 }
