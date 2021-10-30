@@ -1,0 +1,29 @@
+package com.learning.users.model;
+
+import java.lang.module.FindException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Email {
+
+    private String emailAddress;
+    private String password;
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
+
+    public boolean validateEmail(String emailAddress){
+
+        Matcher matcher = pattern.matcher(emailAddress);
+
+        try{
+            if(!matcher.matches()){
+                throw new FindException("The email informed does not match which is expected.");
+            }
+        }
+        catch(Exception e){
+            e.getCause();
+        }
+        return true;
+    }
+}

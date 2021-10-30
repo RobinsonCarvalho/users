@@ -1,16 +1,16 @@
 package com.learning.users.repository;
 
+import com.learning.users.model.Person;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.learning.users.model.User;
-
 public class UserRepositoryInMemory implements UserRepository {
 
-	private Map<Integer, User> storage = new HashMap<>();
+	private Map<Integer, Person> storage = new HashMap<>();
 
 	@Override
-	public void create(User user) {
+	public void create(Person user) {
 		
 		int idUser = storage.size() + 1;
 		user.setId(idUser);
