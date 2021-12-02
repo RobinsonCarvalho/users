@@ -40,14 +40,6 @@ public class Main {
                         User userRead;
                         userRead = userRepositoryInMemory.read(scanner.nextInt());
                         displayUser(userRead);
-//                        System.out.println(userRead.getId() + " | "
-//                            + userRead.getFirstName() + " | "
-//                            + userRead.getLastName() + " | "
-//                            + userRead.getBirthDay() + " | "
-//                            + userRead.getEmail() + " | "
-//                            + userRead.getGender() + " | "
-//                            + userRead.getMaritalStatus() + " | "
-//                            + userRead.getIdPartner());
                         break;
 
                     case 3:
@@ -65,10 +57,14 @@ public class Main {
                     case 4:
                         System.out.println("\nDELETING - INFORM USER ID: ");
                         userRepositoryInMemory.delete(scanner.nextInt());
-
                         break;
                 }
             }while (choice != 0) ;
+
+            scanner.close();
+            System.out.println("Program version: " +
+                    com.learning.users.model.User.class.getPackage().getImplementationVersion());
+
         }
         catch(IllegalArgumentException e){
             System.out.println("Option informed are not among expected." + e.getMessage());
