@@ -67,8 +67,8 @@
 		</plugins>
 	</build>
 	<scm>
-		<developerConnection>scm:git:https://github.com/Robinson-Dev/users/</developerConnection>
-		<url>scm:git:https://github.com/Robinson-Dev/users/</url>
+		<developerConnection>scm:git:https://github.com/Robinson-Dev/users/develop/</developerConnection>
+		<url>scm:git:https://github.com/Robinson-Dev/users/develop/</url>
 		<tag>users-0.0.1</tag>
 	</scm>
 </project>
