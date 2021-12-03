@@ -4,7 +4,7 @@
 
 	<groupId>com.learning</groupId>
 	<artifactId>users</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>23.0.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -67,7 +67,9 @@
 		</plugins>
 	</build>
 	<scm>
-		<developerConnection>scm:git:https://github.com/Robinson-Dev/users/</developerConnection>
-		<tag>HEAD</tag>
+		<url>scm:git:https://github.com/Robinson-Dev/users/.git</url>
+		<connection>scm:git:https://github.com/Robinson-Dev/users/.git</connection>
+		<developerConnection>scm:git:https://github.com/Robinson-Dev/users/.git</developerConnection>
+		<tag>users-0.0.1</tag>
 	</scm>
 </project>
