@@ -4,6 +4,7 @@ import com.learning.users.repository.UserRepositoryInMemory;
 import utility.UtilPersonal;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -49,9 +50,34 @@ public class Main {
 
                         Field[] field = userUpd.getClass().getDeclaredFields();
                         for(Field f : field){
-                            System.out.println(f.getName());
+                            System.out.println(f.getName() + ": ");
+                            var valueInformed = scanner.nextLine();
+                            switch (f.getName()){
+                                case "firstName":
+                                    userUpd.setFirstName(valueInformed);
+                                    break;
+                                case "lastName":
+                                    userUpd.setLastName(valueInformed);
+                                    break;
+                                case "birthDay":
+                                    userUpd.setBirthDay(utility.UtilPersonal.formattingDate(valueInformed));
+                                    break;
+                                case "gender":
+                                    userUpd.setGender(User.Gender.valueOf(valueInformed));
+                                    break;
+                                case "email":
+                                    userUpd.setEmail(valueInformed);
+                                    break;
+                                case "maritalStatus":
+                                    userUpd.setMaritalStatus(User.MaritalStatus.valueOf(valueInformed));
+                                    break;
+                                case "idPartner":
+                                    userUpd.setIdPartner(scanner.nextInt());
+                                    break;
+                            }
                         }
                         userRepositoryInMemory.update(userUpd);
+                        displayUser(userUpd);
                         break;
 
                     case 4:
