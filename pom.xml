@@ -4,7 +4,7 @@
 
 	<groupId>com.learning</groupId>
 	<artifactId>users</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -69,7 +69,7 @@
 	<scm>
 		<connection>scm:git:http://github.com/Robinson-Dev/users</connection>
 		<developerConnection>scm:git:https://github.com/Robinson-Dev/users</developerConnection>
-		<tag>users-0.0.1</tag>
+		<tag>HEAD</tag>
 		<url>https://github.com/Robinson-Dev/users</url>
 	</scm>
 </project>
