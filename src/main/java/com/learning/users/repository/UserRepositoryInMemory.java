@@ -38,11 +38,14 @@ public class UserRepositoryInMemory implements UserRepository {
 	}
 
 	@Override
-	public void delete(int idUser){
+	public boolean delete(int idUser){
 
-		storage.remove(idUser);
+		if(storage.containsKey(idUser)){
+			storage.remove(idUser);
+			return true;
+		}
 		this.count();
-
+		return false;
 	}
 
 	@Override

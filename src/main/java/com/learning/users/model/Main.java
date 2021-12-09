@@ -4,9 +4,9 @@ import com.learning.users.repository.UserRepositoryInMemory;
 import utility.UtilPersonal;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import static java.util.Objects.isNull;
 
 public class Main {
 
@@ -18,12 +18,12 @@ public class Main {
 
         try {
             do {
-                System.out.println("CHOOSE AN ACTION TO BE EXECUTED.\n");
-                System.out.println("0 - EXIT" +
+                System.out.println("\n0 - EXIT" +
                         "\n1 - CREATE"+
                         "\n2 - READ" +
                         "\n3 - UPDATE" +
-                        "\n4 - DELETE\n");
+                        "\n4 - DELETE" +
+                        "\nCHOOSE AN ACTION ABOVE TO BE EXECUTED: ");
 
                 choice = scanner.nextInt();
                 switch (choice) {
@@ -37,14 +37,19 @@ public class Main {
                         break;
 
                     case 2:
-                        System.out.println("\nREADING - INFORM USER ID: ");
+                        System.out.println("    READING - INFORM USER ID: ");
                         User userRead;
                         userRead = userRepositoryInMemory.read(scanner.nextInt());
-                        displayUser(userRead);
+
+                        if (isNull(userRead)) {
+                            System.out.println("User is not listed.");
+                        } else {
+                            displayUser(userRead);
+                        }
                         break;
 
                     case 3:
-                        System.out.println("\nUPDATING - INFORM USER ID: ");
+                        System.out.println("    UPDATING - INFORM USER ID: ");
                         User userUpd;
                         userUpd = userRepositoryInMemory.read(scanner.nextInt());
 
@@ -81,11 +86,18 @@ public class Main {
                         break;
 
                     case 4:
-                        System.out.println("\nDELETING - INFORM USER ID: ");
-                        userRepositoryInMemory.delete(scanner.nextInt());
+                        System.out.println("    DELETING - INFORM USER ID: ");
+                        if(userRepositoryInMemory.delete(scanner.nextInt())){
+                            System.out.println("User deleted.");
+                        }
+                        else{
+                            System.out.println("User was not found. Please check if its listed.");
+                        };
                         break;
                 }
             }while (choice != 0) ;
+
+            System.out.println("Program finalize by user.");
 
             scanner.close();
             System.out.println("Program version: " +
@@ -102,43 +114,43 @@ public class Main {
         UtilPersonal utilPersonal = new UtilPersonal();
         List<User> user = new ArrayList<>();
         User user1 = new User();
-        user1.setFirstName("Robinson");
-        user1.setLastName("Carvalho");
-        user1.setBirthDay(utilPersonal.formattingDate("19-3-1983"));
-        user1.setEmail("robinsonpc@hotmail.com");
+        user1.setFirstName("Lionel");
+        user1.setLastName("Messi");
+        user1.setBirthDay(utilPersonal.formattingDate("10-5-1990"));
+        user1.setEmail("lionelmessi@barcelona.com");
         user1.setGender(User.Gender.MALE);
         user1.setMaritalStatus(User.MaritalStatus.MARRIED);
-        user1.setIdPartner(2);
+        user1.setIdPartner(0);
         user.add(user1);
 
         User user2 = new User();
-        user2.setFirstName("Bruna");
-        user2.setLastName("Vidal");
+        user2.setFirstName("Cristiano");
+        user2.setLastName("Ronaldo");
         user2.setBirthDay(utilPersonal.formattingDate("29-02-1988"));
-        user2.setEmail("brunneca@bol.com.br");
+        user2.setEmail("cristianoronaldo@juventus.com.br");
         user2.setGender(User.Gender.FEMALE);
         user2.setMaritalStatus(User.MaritalStatus.MARRIED);
-        user2.setIdPartner(1);
+        user2.setIdPartner(0);
         user.add(user2);
 
         User user3 = new User();
-        user3.setFirstName("Roney");
-        user3.setLastName("Pires Carvalho");
-        user3.setBirthDay(utilPersonal.formattingDate("07-04-1987"));
-        user3.setEmail("roneyrpc@yahoo.com.br");
+        user3.setFirstName("Neymar");
+        user3.setLastName("Junior");
+        user3.setBirthDay(utilPersonal.formattingDate("07-04-1995"));
+        user3.setEmail("neynarjr@psg.com");
         user3.setGender(User.Gender.MALE);
-        user3.setMaritalStatus(User.MaritalStatus.MARRIED);
-        user3.setIdPartner(4);
+        user3.setMaritalStatus(User.MaritalStatus.SINGLE);
+        user3.setIdPartner(0);
         user.add(user3);
 
         User user4 = new User();
-        user4.setFirstName("Jaine");
-        user4.setLastName("Silva");
+        user4.setFirstName("Robert");
+        user4.setLastName("Lewandowski");
         user4.setBirthDay(utilPersonal.formattingDate("15-05-1992"));
-        user4.setEmail("jaine@bol.com.br");
-        user4.setGender(User.Gender.FEMALE);
+        user4.setEmail("robertlewandowski@bayernmunich.com");
+        user4.setGender(User.Gender.MALE);
         user4.setMaritalStatus(User.MaritalStatus.MARRIED);
-        user4.setIdPartner(3);
+        user4.setIdPartner(0);
         user.add(user4);
         return user;
     }
