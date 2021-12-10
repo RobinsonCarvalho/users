@@ -25,10 +25,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      #- name: Running tests in the project
-      #  run: Running tests processes!
-
       # Runs a set of commands using the runners shell
       - name: Users Project 
         run: |        
