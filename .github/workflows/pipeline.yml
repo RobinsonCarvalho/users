@@ -31,8 +31,6 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Users Project 
-        run: |
-          echo  Preparing Project Environment
+        run: |        
           mvn clean
-          echo Running Tests in the Project
           mvn test -Dtest=UserRepositoryTest
