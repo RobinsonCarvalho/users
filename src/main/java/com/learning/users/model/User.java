@@ -1,4 +1,6 @@
 package com.learning.users.model;
+import com.sun.jdi.IntegerValue;
+
 import java.util.Date;
 
 public class User {
