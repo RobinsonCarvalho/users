@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '16'
-        distribution: 'Oracle OpenJDK'
+        distribution: 'adopt'
         cache: maven
     - name: Testing with Maven
       run: mvn test --file pom.xml
