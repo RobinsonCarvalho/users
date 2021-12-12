@@ -35,7 +35,7 @@ Selecting option Read will exhibit a guide message The identifier code (ID) from
 
 ###Update (option 3):
 
-Choosing update will also ask to inform the user ID (ID). Once done it's going to present all the fields and its has to be filled again:
+Choosing update will also ask to inform the user ID. Once done it's going to present all the fields and its has to be filled again:
 
     CHOOSE AN ACTION ABOVE TO BE EXECUTED:
     3
