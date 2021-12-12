@@ -9,12 +9,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import utility.UtilPersonal;
 
+
 public class UserRepositoryTest {
+
+	UtilPersonal utilPersonal;
 
 	@Test
 	public void shouldCreateUser() {
 
-		UtilPersonal utilPersonal = new UtilPersonal();
+
 		UserRepository userRepository = new UserRepositoryInMemory();
 
 		//given
@@ -37,7 +40,7 @@ public class UserRepositoryTest {
 	@Test
 	public void shouldReadUser(){
 
-		UtilPersonal utilPersonal = new UtilPersonal();
+		//UtilPersonal utilPersonal = new UtilPersonal();
 		UserRepository userRepository = new UserRepositoryInMemory();
 
 		//given
@@ -90,7 +93,7 @@ public class UserRepositoryTest {
 	@Test
 	public void shouldDeleteUser(){
 
-		UtilPersonal utilPersonal = new UtilPersonal();
+		//UtilPersonal utilPersonal = new UtilPersonal();
 		UserRepository userRepository = new UserRepositoryInMemory();
 
 		//given
@@ -121,7 +124,8 @@ public class UserRepositoryTest {
 				+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 		final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
 
-		UtilPersonal utilPersonal = new UtilPersonal();
+
+		//UtilPersonal utilPersonal = new UtilPersonal();
 		UserRepository userRepository = new UserRepositoryInMemory();
 
 		//given
