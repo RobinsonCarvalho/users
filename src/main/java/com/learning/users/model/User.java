@@ -1,86 +1,71 @@
 package com.learning.users.model;
-import com.sun.jdi.IntegerValue;
 
 import java.util.Date;
 
 public class User {
 
-    private Integer id;
-    private String firstName;
+    private int id;
+    private String name;
     private String lastName;
-    private Date birthDay;
-    private String gender;
     private String email;
-    private String maritalStatus;
-    private Integer idPartner;
+    private Date dateOfBirth;
+    private long phone;
+    private String gitHubProfile;
 
-    public Integer getId() { return id; }
-
-    public void setId(Integer id) {	this.id = id;}
-
-    public String getFirstName() { return firstName;  }
-
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-
-    public String getLastName() {return lastName;}
-
-    public void setLastName(String lastName) {this.lastName = lastName;	}
-
-    public Date getBirthDay() {return birthDay;	}
-
-    public void setBirthDay(Date birthDay) {this.birthDay = birthDay;}
-
-    public String getGender() {return gender;}
-
-    public void setGender(Gender gender) { this.gender = gender.description; }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) {this.email = email;	}
-
-    public String getMaritalStatus() {	return maritalStatus;	}
-
-    public void setMaritalStatus(MaritalStatus maritalStatus) { this.maritalStatus = maritalStatus.description; }
-
-    public Integer getIdPartner() {	return idPartner;}
-
-    public void setIdPartner(Integer idPartner) {this.idPartner = idPartner;}
-
-    public enum MaritalStatus {
-
-        SINGLE("single"),
-        MARRIED("married"),
-        DIVORCED("divorced"),
-        WIDOW("widow");
-
-        private String description;
-
-        MaritalStatus(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
+    public int getId() {
+        return id;
     }
 
-    public enum Gender {
+    public void setId(int id) {
+        this.id = id;
+    }
 
-        MALE("male"),
-        FEMALE("female"),
-        UNDEFINED("undefined");
+    public String getName() {
+        return name;
+    }
 
-        private String description;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        Gender(String description) {
-            this.description = description;
-        }
+    public String getLastName() {
+        return lastName;
+    }
 
-        public String getDescription() {
-            return description;
-        }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(long phone) {
+        this.phone = phone;
+    }
+
+    public String getGitHubProfile() {
+        return gitHubProfile;
+    }
+
+    public void setGitHubProfile(String gitHubProfile) {
+        this.gitHubProfile = gitHubProfile;
     }
 
 }
-

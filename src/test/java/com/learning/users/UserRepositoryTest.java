@@ -1,149 +1,132 @@
 package com.learning.users;
 
-import com.learning.users.model.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.learning.users.model.User;
 import com.learning.users.repository.UserRepository;
 import com.learning.users.repository.UserRepositoryInMemory;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import utility.UtilPersonal;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import utility.UtilPersonal;
-
 
 public class UserRepositoryTest {
 
-	UtilPersonal utilPersonal;
+    @Test
+    void check_methods_sets_from_user_class(){
 
-	@Test
-	public void shouldCreateUser() {
+        User user = new User();
+        user.setId(1);
+        user.setName("Joaquim");
+        user.setLastName("Gusmao");
+        user.setEmail("joaquim.gusmao@gmail.com");
+        user.setDateOfBirth(UtilPersonal.formattingDate("02-05-2000"));
+        user.setPhone(834185473);
+        user.setGitHubProfile("Inserting data to simulate a gitHub profile. This will be integrated in the future");
 
+        Assertions.assertAll("user",
+                () -> Assertions.assertEquals(1, user.getId()),
+                () -> Assertions.assertEquals("Joaquim", user.getName()),
+                () ->Assertions.assertEquals("Gusmao", user.getLastName()),
+                () ->Assertions.assertEquals("joaquim.gusmao@gmail.com", user.getEmail()),
+                () ->Assertions.assertEquals(UtilPersonal.formattingDate("02-05-2000"), user.getDateOfBirth()),
+                () ->Assertions.assertEquals(834185473, user.getPhone()),
+                () ->Assertions.assertEquals("Inserting data to simulate a gitHub profile. This will be integrated in the future", user.getGitHubProfile())
+        );
+    }
 
-		UserRepository userRepository = new UserRepositoryInMemory();
+    @Test
+    void check_methods_gets_from_user_class(){
 
-		//given
-		User user = new User();
-		user.setFirstName("Robinson");
-		user.setLastName("Carvalho");
-		user.setBirthDay(utilPersonal.formattingDate("19-3-1983"));
-		user.setEmail("robinsonpc@hotmail.com");
-		user.setGender(User.Gender.MALE);
-		user.setMaritalStatus(User.MaritalStatus.MARRIED);
-		user.setIdPartner(2);
+        User user = new User();
+        user.setId(1);
+        user.setName("Joaquim");
+        user.setLastName("Gusmao");
+        user.setEmail("joaquim.gusmao@gmail.com");
+        user.setDateOfBirth(UtilPersonal.formattingDate("02-05-2000"));
+        user.setPhone(834185473);
+        user.setGitHubProfile("Inserting data to simulate a gitHub profile. This will be integrated in the future");
 
-		//when
-		userRepository.create(user);
+        Assertions.assertAll("user",
+                () -> Assertions.assertNotNull(user.getId()),
+                () -> Assertions.assertNotNull(user.getName()),
+                () ->Assertions.assertNotNull(user.getLastName()),
+                () ->Assertions.assertNotNull(user.getEmail()),
+                () ->Assertions.assertNotNull(user.getDateOfBirth()),
+                () ->Assertions.assertNotNull(user.getPhone()),
+                () ->Assertions.assertNotNull(user.getGitHubProfile())
+        );
+    }
 
-		//then
-		Assertions.assertEquals(1, userRepository.count());
-	}
+    @Test
+    void should_create_user(){
 
-	@Test
-	public void shouldReadUser(){
+        UserRepository userRepository = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("Joaquim");
+        user.setLastName("Gusmao");
+        user.setEmail("joaquim.gusmao@gmail.com");
+        user.setDateOfBirth(UtilPersonal.formattingDate("02-05-2000"));
+        user.setPhone(834185473);
+        user.setGitHubProfile("Inserting data to simulate a gitHub profile. This will be integrated in the future");
+        userRepository.create(user);
 
-		//UtilPersonal utilPersonal = new UtilPersonal();
-		UserRepository userRepository = new UserRepositoryInMemory();
+        Assertions.assertEquals(1, userRepository.count());
+    }
 
-		//given
-		User user1 = new User();
-		user1.setFirstName("Robinson");
-		user1.setLastName("Carvalho");
-		user1.setBirthDay(utilPersonal.formattingDate("19-3-1983"));
-		user1.setEmail("robinsonpc@hotmail.com");
-		user1.setGender(User.Gender.MALE);
-		user1.setMaritalStatus(User.MaritalStatus.MARRIED);
-		user1.setIdPartner(2);
-		userRepository.create(user1);
+    @Test
+    void should_not_be_minor_age(){
 
-		//when
-		User userReturn1 = userRepository.read(1);
-		User userReturn2 = userRepository.read(2);
+        User user = new User();
 
-		//then
-		Assertions.assertEquals(user1.getEmail(), userReturn1.getEmail());
-		Assertions.assertNull(userReturn2);
+        user.setName("Joaquim");
+        user.setLastName("Gusmao");
+        user.setEmail("joaquim.gusmao@gmail.com");
+        user.setDateOfBirth(UtilPersonal.formattingDate("15-12-2005"));
+        user.setPhone(834185473);
+        user.setGitHubProfile("Inserting data to simulate a gitHub profile. This will be integrated in the future");
 
-	}
+        Calendar dateExpected = Calendar.getInstance();
+        dateExpected.add(Calendar.YEAR, -18);
+        dateExpected.setTime(dateExpected.getTime());
 
-	@Test
-	public void shouldUpdateUser(){
+        Assertions.assertFalse(user.getDateOfBirth().before(dateExpected.getTime()));
+    }
 
-		UtilPersonal utilPersonal = new UtilPersonal();
-		UserRepository userRepository = new UserRepositoryInMemory();
+    @Test
+    void createEmailFilled(){
 
-		//given
-		User user = new User();
-		user.setFirstName("Robinson");
-		user.setLastName("Carvalho");
-		user.setBirthDay(utilPersonal.formattingDate("19-3-1983"));
-		user.setEmail("robinsonpc@hotmail.com");
-		user.setGender(User.Gender.MALE);
-		user.setMaritalStatus(User.MaritalStatus.MARRIED);
-		user.setIdPartner(2);
-		userRepository.create(user);
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
 
-		//when
-		user.setFirstName("RobinsonUpdated");
-		userRepository.update(user);
+        User user = new User();
+        user.setName("Joaquim");
+        user.setLastName("Gusmao");
+        user.setEmail("joaquim.gusmao@gmail.com");
+        user.setDateOfBirth(UtilPersonal.formattingDate("15-12-2005"));
+        user.setPhone(834185473);
+        user.setGitHubProfile("Inserting data to simulate a gitHub profile. This will be integrated in the future");
+        Matcher matcher = pattern.matcher(user.getEmail());
 
-		//then
-		Assertions.assertNotEquals("Robinson", user.getFirstName());
+        Assertions.assertTrue(matcher.matches());
+    }
 
-	}
+    @Test
+    void createTest(){
 
-	@Test
-	public void shouldDeleteUser(){
+        Map<Integer, User> map = new HashMap<>();
+        User user = new User();
+        user.setName("Joaquim");
+        user.setLastName("Gusmao");
+        user.setEmail("joaquim.gusmao@gmail.com");
+        user.setDateOfBirth(UtilPersonal.formattingDate("15-12-2005"));
+        user.setPhone(834185473);
+        user.setGitHubProfile("Inserting data to simulate a gitHub profile. This will be integrated in the future");
+        map.put(1, user);
+        Assertions.assertFalse(map.isEmpty());
+    }
 
-		//UtilPersonal utilPersonal = new UtilPersonal();
-		UserRepository userRepository = new UserRepositoryInMemory();
-
-		//given
-		User user = new User();
-		user.setFirstName("Robinson");
-		user.setLastName("Carvalho");
-		user.setBirthDay(utilPersonal.formattingDate("19-3-1983"));
-		user.setEmail("robinsonpc@hotmail.com");
-		user.setGender(User.Gender.MALE);
-		user.setMaritalStatus(User.MaritalStatus.MARRIED);
-		user.setIdPartner(2);
-		userRepository.create(user);
-
-		//when
-		userRepository.delete(user.getId());
-		userRepository.read(user.getId());
-
-		//then
-		Assertions.assertNotNull(user);
-		Assertions.assertEquals(0, userRepository.count());
-
-	}
-
-	@Test
-	public void shouldCheckEmailIntegrity(){
-
-		final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-				+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-		final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
-
-
-		//UtilPersonal utilPersonal = new UtilPersonal();
-		UserRepository userRepository = new UserRepositoryInMemory();
-
-		//given
-		User user = new User();
-		user.setFirstName("Bruna");
-		user.setLastName("Carvalho");
-		user.setBirthDay(utilPersonal.formattingDate("31-01-2000"));
-		user.setEmail("brunecca@bol.com.br");
-		user.setGender(User.Gender.MALE);
-		user.setMaritalStatus(User.MaritalStatus.MARRIED);
-		user.setIdPartner(10);
-
-		//when
-		userRepository.create(user);
-		Matcher matcher = pattern.matcher(user.getEmail());
-
-		//then
-		Assertions.assertTrue(matcher.matches());
-
-	}
 }
