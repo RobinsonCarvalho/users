@@ -9,11 +9,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest, ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Run maven test command
-        run: mvn test
+        run: mvn verify
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
