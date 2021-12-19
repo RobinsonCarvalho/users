@@ -1,0 +1,26 @@
+name: JAVA CI - maven test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run maven test command
+        run: mvn verify
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+            directory: ./coverage/reports/
+            env_vars: OS,JAVA
+            fail_ci_if_error: true
+            files: ./coverage1.xml,./coverage2.xml
+            flags: unittests
+            name: codecov-umbrella           
