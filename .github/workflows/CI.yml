@@ -18,7 +18,13 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-            file: ./target/site/jacoco/index.html
+            directory: ./coverage/reports/
+            env_vars: OS,JAVA
+            fail_ci_if_error: true
+            files: ./coverage1.xml,./coverage2.xml
+            flags: unittests
+            name: codecov-umbrella
+            path_to_write_report: ./coverage/codecov_report.txt
             verbose: true
             
            
