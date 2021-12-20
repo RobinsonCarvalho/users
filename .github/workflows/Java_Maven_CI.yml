@@ -33,7 +33,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOVERAGE_TOKEN }} # not required for public repos
           directory: ./target/site/jacoco/
-          files: ./target/site/jacoco/index.xml  
+          files: ./jacoco.xml,./index.html  
           flags: unittests # optional
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
