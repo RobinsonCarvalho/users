@@ -1,32 +1,32 @@
 name: Java CI
 
 on:
-	push:
-		branches: [ main ]
-	pull_request:
-		branches: [ main ]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-	jobs:
-		verify:			
-			runs-on: windows-latest
-			steps:
-				- uses: actions/checkout@v2
-				- name: Set up JDK
-					uses: actions/setup-java@v2
-					with:
-						java-version: '16'
-						distribution: 'adopt'
-						cache: maven
-				
-				- name: Testing Phase
-					run: |
-						mvn clean
-						mvn verify
+jobs:
+  verify:			
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'adopt'
+          cache: maven
 
-	report:
-		needs: verify
-		runs-on: windows-latest
-		steps:
-		- uses: actions/checkout@v2
-		- name: Upload coverage to Codecov
-			uses: codecov/codecov-action@v2
+      - name: Testing Phase
+        run: |
+          mvn clean
+          mvn verify
+
+  report:
+    needs: verify
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
