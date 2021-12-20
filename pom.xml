@@ -76,25 +76,17 @@
 				<version>0.8.7</version>
 				<executions>
 					<execution>
-						<id>prepare-agent</id>
+						<id>jacoco-prepare</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
-						<configuration>
-							<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-							<propertyName>surefireArgLine</propertyName>
-						</configuration>
 					</execution>
 					<execution>
-						<id>report</id>
-						<phase>test</phase>
+						<id>jacoco-report</id>
+						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
-						<configuration>
-							<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-						</configuration>
 					</execution>
 					<execution>
 						<id>jacoco-check</id>
@@ -107,9 +99,9 @@
 									<element>PACKAGE</element>
 									<limits>
 										<limit>
-											<counter>CLASS</counter>
+											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.90</minimum>
+											<minimum>0.35</minimum>
 										</limit>
 									</limits>
 								</rule>
