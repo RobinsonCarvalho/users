@@ -31,7 +31,7 @@ jobs:
       - uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          files: ./jacoco.xml,./index.html
+          files: ./coverage-report/jacoco.xml,./coverage-report/index.html
           flags: unittests # optional
           name: codecov-umbrella # optional
           #fail_ci_if_error: true # optional (default = false)
