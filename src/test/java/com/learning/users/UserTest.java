@@ -7,8 +7,6 @@ import utility.UtilPersonal;
 
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UserTest {
 
@@ -77,14 +75,4 @@ public class UserTest {
         Assertions.assertFalse(user.getDateOfBirth().before(dateExpected.getTime()));
     }
 
-    @Test
-    void teste(){
-
-        final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
-                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher("email@test.com");
-        Assertions.assertTrue(matcher.matches());
-
-    }
 }
