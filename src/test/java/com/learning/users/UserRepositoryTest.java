@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import utility.UtilPersonal;
 
+import java.text.ParseException;
+
 public class UserRepositoryTest {
 
     @Test
-    void shouldCreateUser() {
+    void shouldCreateUser() throws ParseException {
 
         User user = new User();
         user.setName("Joaquim");
@@ -24,7 +26,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void shouldStorageUser() {
+    void shouldStorageUser() throws ParseException {
 
         UserRepository userRepository = new UserRepositoryInMemory();
         User user = new User();

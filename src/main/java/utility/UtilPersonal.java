@@ -9,28 +9,22 @@ import java.util.regex.Pattern;
 
 public class UtilPersonal {
 
-    public static Date formattingDate(String date){
+    public static Date formattingDate(String date) throws ParseException {
 
         Date treatedDate;
-
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-        try {
-            treatedDate = formatter.parse(date);
-            return treatedDate;
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
+        treatedDate = formatter.parse(date);
+        return treatedDate;
 
     }
 
-    public static boolean validateEmail(String email){
+    public static boolean validateEmail(String email) throws IllegalArgumentException {
 
         final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
-
         Matcher matcher = pattern.matcher(email);
-        return matcher.matches()? true: false;
+        return matcher.matches();
 
     }
 
