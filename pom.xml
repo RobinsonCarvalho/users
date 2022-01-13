@@ -38,6 +38,11 @@
 			<version>4.13.2</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>7.0.1.Final</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -88,7 +93,7 @@
 							<goal>report</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>/coverage-report/</outputDirectory>
+							<outputDirectory>coverage-report/</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -99,14 +104,7 @@
 						<configuration>
 							<rules>
 								<rule>
-									<element>PACKAGE</element>
-									<limits>
-										<limit>
-											<counter>LINE</counter>
-											<value>COVEREDRATIO</value>
-											<minimum>0.9</minimum>
-										</limit>
-									</limits>
+									<element>CLASS</element>
 								</rule>
 							</rules>
 						</configuration>

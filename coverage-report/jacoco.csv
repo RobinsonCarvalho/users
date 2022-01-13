@@ -1,0 +1,4 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+users,com.learning.users.model,User,0,52,0,0,0,21,0,15,0,15
+users,com.learning.users.repository,UserRepositoryInMemory,2,29,1,1,0,7,1,3,0,3
+users,com.learning.users.Controller,UserController,10,24,1,1,2,9,2,3,1,3
