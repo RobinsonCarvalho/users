@@ -4,24 +4,27 @@ import com.learning.users.model.User;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.*;
 
-<span class="fc" id="L9">public class UserRepositoryInMemory implements UserRepository{</span>
+<span class="fc" id="L10">public class UserRepositoryInMemory implements UserRepository{</span>
 
-<span class="fc" id="L11">    Map&lt;String, User&gt; mapStorage = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L12">    Map&lt;String, User&gt; mapStorage = new HashMap&lt;&gt;();</span>
 
     public void create(User user){
-<span class="fc" id="L14">        Set&lt;ConstraintViolation&lt;User&gt;&gt; violations = VALIDATOR.validate(user);</span>
-<span class="fc bfc" id="L15" title="All 2 branches covered.">        if(!violations.isEmpty()){</span>
-<span class="fc" id="L16">            throw new ConstraintViolationException(violations);</span>
+<span class="fc" id="L15">        Set&lt;ConstraintViolation&lt;User&gt;&gt; violations = VALIDATOR.validate(user);</span>
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        if(!violations.isEmpty()){</span>
+<span class="fc" id="L17">            throw new ConstraintViolationException(violations);</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        }else if(mapStorage.containsKey(user.getEmail())){</span>
+<span class="fc" id="L19">            throw new KeyAlreadyExistsException(user.getEmail());</span>
         }
-<span class="fc" id="L18">        int idUser = mapStorage.size() + 1;</span>
-<span class="fc" id="L19">        user.setId(idUser);</span>
-<span class="fc" id="L20">        mapStorage.put(user.getEmail(), user);</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L21">        int idUser = mapStorage.size() + 1;</span>
+<span class="fc" id="L22">        user.setId(idUser);</span>
+<span class="fc" id="L23">        mapStorage.put(user.getEmail(), user);</span>
+<span class="fc" id="L24">    }</span>
 
     public int count(){
-<span class="fc" id="L24">        return mapStorage.size();</span>
+<span class="fc" id="L27">        return mapStorage.size();</span>
     }
 
 }
