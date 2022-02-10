@@ -1,23 +1,30 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-import org.jetbrains.annotations.NotNull;
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+
+import javax.management.openmbean.KeyAlreadyExistsException;
+import java.util.*;
 
 public class UserRepositoryInMemory implements UserRepository{
 
-    Map<Integer, User> mapStorage = new HashMap<>();
+    Map<String, User> mapStorage = new HashMap<>();
 
-    public void create(@NotNull User user){
-
-        int idUser = mapStorage.size();
+    public void create(User user){
+        Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
+        if(!violations.isEmpty()){
+            throw new ConstraintViolationException(violations);
+        }else if(mapStorage.containsKey(user.getEmail())){
+            throw new KeyAlreadyExistsException(user.getEmail());
+        }
+        int idUser = mapStorage.size() + 1;
         user.setId(idUser);
-        mapStorage.put(idUser, user);
-
+        mapStorage.put(user.getEmail(), user);
     }
 
     public int count(){
         return mapStorage.size();
     }
+
 }

@@ -1,29 +1,11 @@
 package com.learning.users;
 
 import com.learning.users.model.User;
-import com.learning.users.Controller.UserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 public class UserTest {
-
-    @Test
-    void shouldVerifyIfUserDataAreAccordinglyWithValidator(){
-
-        UserController userController = new UserController();
-        User user = new User();
-
-        user.setId(1);
-        user.setName("Robinson$");
-        user.setLastName("Carvalho");
-        user.setEmail("robinsoncarvalho@gmail.com");
-        user.setDateOfBirth(LocalDate.of(2000, 5, 2));
-        user.setPhone("+353834198168");
-        user.setGitHubProfile("http://www.linkedin.com");
-        userController.addUser(user);
-        Assertions.assertTrue(userController.addUser(user));
-    }
 
     @Test
     void shouldSetValuesToAttributesOfUserClass() {
