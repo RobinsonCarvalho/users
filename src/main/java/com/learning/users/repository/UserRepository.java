@@ -1,12 +1,8 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
-
-import java.util.Set;
 
 public interface UserRepository {
 
@@ -17,6 +13,10 @@ public interface UserRepository {
             .getValidator();
 
     void create(User user);
+
+    void update(User user);
+
+    User read(String email);
 
     int count();
 

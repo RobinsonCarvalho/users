@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDate;
 
@@ -36,9 +37,7 @@ public class UserRepositoryTest {
         user.setPhone("+353834185473");
         user.setGitHubProfile("http://www.linkedin.com/batistini");
         Assertions.assertThrows(ConstraintViolationException.class,
-                () -> {
-                    userRepositoryInMemory.create(user);
-                }
+                () -> userRepositoryInMemory.create(user)
         );
     }
 
@@ -65,4 +64,58 @@ public class UserRepositoryTest {
                 ()-> userRepositoryInMemory.create(newUser)
         );
     }
+
+    @Test
+    void shouldUpdateDataFromTheUser(){
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
+
+        user.setLastName("Miller Roosevelt");
+        userRepositoryInMemory.update(user);
+
+        User newUser;
+        newUser = userRepositoryInMemory.read(user.getEmail());
+        Assertions.assertEquals("Miller Roosevelt", newUser.getLastName());
+    }
+
+    @Test
+    void shouldNotUpdateUserWhenFieldValueIsMissing(){
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1955, 7, 30));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
+        user.setLastName("");
+        Assertions.assertThrows(ConstraintViolationException.class,
+                ()-> userRepositoryInMemory.update(user)
+        );
+    }
+
+    @Test
+    void shouldWarnWhenUserNotFound(){
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("Mary");
+        user.setLastName("Gordon");
+        user.setEmail("emailinexistent@test.com");
+        user.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        user.setPhone("+353834178826");
+        user.setGitHubProfile("http://www.linkedin.com/marygordon");
+
+        Assertions.assertThrows(InvalidKeyException.class,
+                ()-> userRepositoryInMemory.read(user.getEmail())
+        );
+    }
+
 }
