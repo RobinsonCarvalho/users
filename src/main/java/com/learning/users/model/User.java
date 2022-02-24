@@ -1,6 +1,6 @@
 package com.learning.users.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class User {
 
@@ -8,8 +8,8 @@ public class User {
     private String name;
     private String lastName;
     private String email;
-    private Date dateOfBirth;
-    private long phone;
+    private LocalDate dateOfBirth;
+    private String phone;
     private String gitHubProfile;
 
     public int getId() {
@@ -44,19 +44,19 @@ public class User {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
