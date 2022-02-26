@@ -118,4 +118,34 @@ public class UserRepositoryTest {
         );
     }
 
+    @Test
+    void shouldDeleteUserRequested(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User firstUser = new User();
+        firstUser.setName("John");
+        firstUser.setLastName("Miller");
+        firstUser.setEmail("jmiller@gmail.com");
+        firstUser.setDateOfBirth(LocalDate.of(1955, 7, 30));
+        firstUser.setPhone("+353834178265");
+        firstUser.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(firstUser);
+
+        User secondUser = new User();
+        secondUser.setName("Giuseppe");
+        secondUser.setLastName("Batistini");
+        secondUser.setEmail("c.batistini@gmail.com");
+        secondUser.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        secondUser.setPhone("+353834185473");
+        secondUser.setGitHubProfile("http://www.linkedin.com/batistini");
+        userRepositoryInMemory.create(secondUser);
+
+        userRepositoryInMemory.delete(firstUser.getEmail());
+
+        Assertions.assertThrows(InvalidKeyException.class,
+                () -> userRepositoryInMemory.read(firstUser.getEmail())
+        );
+
+    }
+
 }

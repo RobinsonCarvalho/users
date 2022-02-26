@@ -11,7 +11,10 @@ import java.util.*;
 public class UserRepositoryInMemory implements UserRepository{
 
     Map<String, User> mapStorage = new HashMap<>();
+    Map<String, LocalDateTime> StorageUserUpdated = new HashMap<>();
+    Map<String, LocalDateTime> storageUserDeleted = new HashMap<>();
 
+    @Override
     public void create(User user){
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
         if(!violations.isEmpty()){
@@ -25,22 +28,29 @@ public class UserRepositoryInMemory implements UserRepository{
         System.out.println("User created successfully.");
     }
 
+    @Override
     public void update(User user){
-
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
         }
-
-        Map<String, LocalDateTime> StorageUserUpdated = new HashMap<>();
         mapStorage.replace(user.getEmail(), user);
         StorageUserUpdated.replace(user.getEmail(), LocalDateTime.now());
         System.out.println("User data updated successfully.");
-
     }
 
+    @Override
+    public void delete(String email){
+        if(!mapStorage.containsKey(email) || storageUserDeleted.containsKey(email)){
+            throw new InvalidKeyException(email);
+        }
+        storageUserDeleted.put(email, LocalDateTime.now());
+        System.out.println("User " + email.toUpperCase() + " was successfully removed.");
+    }
+
+    @Override
     public User read(String email){
-        if(!mapStorage.containsKey(email)){
+        if(!mapStorage.containsKey(email) || storageUserDeleted.containsKey(email)){
             throw new InvalidKeyException(email);
         }
         return mapStorage.get(email);

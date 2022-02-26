@@ -18,6 +18,8 @@ public interface UserRepository {
 
     User read(String email);
 
+    void delete(String email);
+
     int count();
 
 }
