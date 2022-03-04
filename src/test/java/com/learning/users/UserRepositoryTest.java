@@ -5,7 +5,6 @@ import com.learning.users.repository.UserRepositoryInMemory;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDate;
 
@@ -13,6 +12,7 @@ public class UserRepositoryTest {
 
     @Test
     void shouldCreateUser(){
+
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
         user.setName("Reynold");
@@ -36,9 +36,7 @@ public class UserRepositoryTest {
         user.setPhone("+353834185473");
         user.setGitHubProfile("http://www.linkedin.com/batistini");
         Assertions.assertThrows(ConstraintViolationException.class,
-                () -> {
-                    userRepositoryInMemory.create(user);
-                }
+                () -> userRepositoryInMemory.create(user)
         );
     }
 
@@ -62,7 +60,30 @@ public class UserRepositoryTest {
         newUser.setPhone("+353834754577");
         newUser.setGitHubProfile("http://www.linkedin.com/roy");
         Assertions.assertThrows(KeyAlreadyExistsException.class,
-                ()-> userRepositoryInMemory.create(newUser)
+                ()-> userRepositoryInMemory.create(newUser));
+    }
+
+    @Test
+    void shouldGetUserData(){
+        UserRepositoryInMemory userRepository = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("Bruce");
+        user.setLastName("Twant");
+        user.setEmail("brucet@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1975,12, 30));
+        user.setPhone("+353838547265");
+        user.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        userRepository.create(user);
+
+        Assertions.assertAll(
+                ()-> Assertions.assertEquals(1, user.getId()),
+                ()-> Assertions.assertEquals("Bruce", user.getName()),
+                ()-> Assertions.assertEquals("Twant", user.getLastName()),
+                ()-> Assertions.assertEquals("brucet@gmail.com", user.getEmail()),
+                ()-> Assertions.assertEquals(LocalDate.of(1975,12, 30), user.getDateOfBirth()),
+                ()-> Assertions.assertEquals("+353838547265", user.getPhone()),
+                ()-> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
+
         );
     }
 }
