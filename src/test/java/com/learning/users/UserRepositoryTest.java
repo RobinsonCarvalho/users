@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UserRepositoryTest {
 
@@ -168,5 +170,91 @@ public class UserRepositoryTest {
                 ()-> Assertions.assertEquals("+353838547265", user.getPhone()),
                 ()-> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
         );
+    }
+
+    @Test
+    void shouldListUserAsRequested(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        List<User> listOfUsers = new ArrayList<>();
+
+        User userA = new User();
+        userA.setName("Reynold");
+        userA.setLastName("O'Shean");
+        userA.setEmail("reynold.oshean.gusmao@gmail.com");
+        userA.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        userA.setPhone("+353834185473");
+        userA.setGitHubProfile("http://www.linkedin.com");
+        listOfUsers.add(userA);
+
+        User userB = new User();
+        userB.setName("Giuseppe");
+        userB.setLastName("Batistini");
+        userB.setEmail("c.batistini@gmail.com");
+        userB.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        userB.setPhone("+353834185473");
+        userB.setGitHubProfile("http://www.linkedin.com/batistini");
+        listOfUsers.add(userB);
+        
+        User userC = new User();
+        userC.setName("John");
+        userC.setLastName("Miller");
+        userC.setEmail("jmiller@gmail.com");
+        userC.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userC.setPhone("+353834178265");
+        userC.setGitHubProfile("http://www.linkedin.com/jmiller");
+        listOfUsers.add(userC);
+
+        User userD = new User();
+        userD.setName("Joseph");
+        userD.setLastName("Stuart");
+        userD.setEmail("josephstuart@gmail.com");
+        userD.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userD.setPhone("+353834754577");
+        userD.setGitHubProfile("http://www.linkedin.com/joseph");
+        listOfUsers.add(userD);
+
+        User userE = new User();
+        userE.setName("Mary");
+        userE.setLastName("Gordon");
+        userE.setEmail("emailinexistent@test.com");
+        userE.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userE.setPhone("+353834178826");
+        userE.setGitHubProfile("http://www.linkedin.com/marygordon");
+        listOfUsers.add(userE);
+        
+        User userF = new User();
+        userF.setName("Bruce");
+        userF.setLastName("Twant");
+        userF.setEmail("brucet@gmail.com");
+        userF.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userF.setPhone("+353838547265");
+        userF.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUsers.add(userF);
+
+        for(User user : listOfUsers){
+            userRepositoryInMemory.create(user);
+        }
+
+        Assertions.assertEquals(2, userRepositoryInMemory.listUser("Jo").size());
+    }
+
+    @Test
+    void shouldNotSearchIfParameterDoesNotMeetTheRequirements(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("Bruce");
+        user.setLastName("Twant");
+        user.setEmail("brucet@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1975,12, 30));
+        user.setPhone("+353838547265");
+        user.setGitHubProfile("http://www.linledin.com/brucetwant/");
+
+        userRepositoryInMemory.create(user);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+            () -> userRepositoryInMemory.listUser(""),
+            "At least two characters have to be provided");
     }
 }

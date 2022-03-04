@@ -56,8 +56,28 @@ public class UserRepositoryInMemory implements UserRepository{
         return mapStorage.get(email);
     }
 
+    @Override
     public int count(){
         return mapStorage.size();
     }
 
+    @Override
+    public List<User> listUser(String userSearch){
+
+        List<User> listOfUser = new ArrayList<>();
+
+        if(userSearch.length() < 2){
+            throw new IllegalArgumentException("At least two characters have to be provided");
+        }
+
+        mapStorage.forEach(
+            (key, user) ->{
+                if(user.getName().contains(userSearch)
+                    && !storageUserDeleted.containsKey(user.getEmail())){
+                    listOfUser.add(user);
+                }
+            }
+        );
+        return listOfUser;
+    }
 }

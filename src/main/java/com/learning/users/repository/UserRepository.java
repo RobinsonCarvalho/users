@@ -4,6 +4,8 @@ import com.learning.users.model.User;
 import jakarta.validation.Validation;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
+import java.util.List;
+
 public interface UserRepository {
 
     jakarta.validation.Validator VALIDATOR = Validation.byDefaultProvider()
@@ -21,5 +23,7 @@ public interface UserRepository {
     void delete(String email);
 
     int count();
+
+    List<User> listUser(String userSearch);
 
 }
