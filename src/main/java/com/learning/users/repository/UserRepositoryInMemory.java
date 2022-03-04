@@ -13,6 +13,7 @@ public class UserRepositoryInMemory implements UserRepository{
     Map<String, User> mapStorage = new HashMap<>();
 
     public void create(User user){
+
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
@@ -32,9 +33,9 @@ public class UserRepositoryInMemory implements UserRepository{
             throw new ConstraintViolationException(violations);
         }
 
-        Map<String, LocalDateTime> StorageUserUpdated = new HashMap<>();
+        Map<String, LocalDateTime> storageUserUpdated = new HashMap<>();
         mapStorage.replace(user.getEmail(), user);
-        StorageUserUpdated.replace(user.getEmail(), LocalDateTime.now());
+        storageUserUpdated.replace(user.getEmail(), LocalDateTime.now());
         System.out.println("User data updated successfully.");
 
     }
