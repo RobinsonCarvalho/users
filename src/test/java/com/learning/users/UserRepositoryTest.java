@@ -257,4 +257,208 @@ public class UserRepositoryTest {
             () -> userRepositoryInMemory.listUser(""),
             "At least two characters have to be provided");
     }
+
+    @Test
+    void shouldWarnUserOfLimitationOfUserToBeReturned() {
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        List<User> listOfUser = new ArrayList<>();
+
+        User userA = new User();
+        userA.setName("Reynold");
+        userA.setLastName("O'Shean");
+        userA.setEmail("reynold.oshean@gmail.com");
+        userA.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        userA.setPhone("+353834185473");
+        userA.setGitHubProfile("http://www.linkedin.com");
+        listOfUser.add(userA);
+
+        User userB = new User();
+        userB.setName("Giuseppe");
+        userB.setLastName("Batistini");
+        userB.setEmail("c.batistini@gmail.com");
+        userB.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        userB.setPhone("+353834185473");
+        userB.setGitHubProfile("http://www.linkedin.com/batistini");
+        listOfUser.add(userB);
+
+        User userC = new User();
+        userC.setName("John");
+        userC.setLastName("Miller");
+        userC.setEmail("mellanie@gmail.com");
+        userC.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userC.setPhone("+353834178265");
+        userC.setGitHubProfile("http://www.linkedin.com/jmiller");
+        listOfUser.add(userC);
+
+        User userD = new User();
+        userD.setName("Joseph");
+        userD.setLastName("Stuart");
+        userD.setEmail("bernard@gmail.com");
+        userD.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userD.setPhone("+353834754577");
+        userD.setGitHubProfile("http://www.linkedin.com/joseph");
+        listOfUser.add(userD);
+
+        User userE = new User();
+        userE.setName("Mary");
+        userE.setLastName("Gordon");
+        userE.setEmail("bryan@test.com");
+        userE.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userE.setPhone("+353834178826");
+        userE.setGitHubProfile("http://www.linkedin.com/marygordon");
+        listOfUser.add(userE);
+
+        User userF = new User();
+        userF.setName("Bruce");
+        userF.setLastName("Twant");
+        userF.setEmail("brucet@gmail.com");
+        userF.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userF.setPhone("+353838547265");
+        userF.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userF);
+
+        User userG = new User();
+        userG.setName("Reynold");
+        userG.setLastName("O'Shean");
+        userG.setEmail("reynold.oshean.gusmao@gmail.com");
+        userG.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        userG.setPhone("+353834185473");
+        userG.setGitHubProfile("http://www.linkedin.com");
+        listOfUser.add(userG);
+
+        User userH = new User();
+        userH.setName("Giuseppe");
+        userH.setLastName("Batistini");
+        userH.setEmail("jeniffer@gmail.com");
+        userH.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        userH.setPhone("+353834185473");
+        userH.setGitHubProfile("http://www.linkedin.com/batistini");
+        listOfUser.add(userH);
+
+        User userI = new User();
+        userI.setName("John");
+        userI.setLastName("Miller");
+        userI.setEmail("jmiller@gmail.com");
+        userI.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userI.setPhone("+353834178265");
+        userI.setGitHubProfile("http://www.linkedin.com/jmiller");
+        listOfUser.add(userI);
+
+        User userJ = new User();
+        userJ.setName("Joseph");
+        userJ.setLastName("Stuart");
+        userJ.setEmail("josephstuart@gmail.com");
+        userJ.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ.setPhone("+353834754577");
+        userJ.setGitHubProfile("http://www.linkedin.com/joseph");
+        listOfUser.add(userJ);
+
+        User userK = new User();
+        userK.setName("Mary");
+        userK.setLastName("Gordon");
+        userK.setEmail("emailinexistent@test.com");
+        userK.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userK.setPhone("+353834178826");
+        userK.setGitHubProfile("http://www.linkedin.com/marygordon");
+        listOfUser.add(userK);
+
+        User userL = new User();
+        userL.setName("Bruce");
+        userL.setLastName("Twant");
+        userL.setEmail("anthony@gmail.com");
+        userL.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userL.setPhone("+353838547265");
+        userL.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userL);
+
+        User userM = new User();
+        userM.setName("Bruce");
+        userM.setLastName("Twant");
+        userM.setEmail("george@gmail.com");
+        userM.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userM.setPhone("+353838547265");
+        userM.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userM);
+
+        User userN = new User();
+        userN.setName("Bruce");
+        userN.setLastName("Twant");
+        userN.setEmail("michael@gmail.com");
+        userN.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userN.setPhone("+353838547265");
+        userN.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userN);
+
+        User userO = new User();
+        userO.setName("Bruce");
+        userO.setLastName("Twant");
+        userO.setEmail("kevyn@gmail.com");
+        userO.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userO.setPhone("+353838547265");
+        userO.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userO);
+
+        User userP = new User();
+        userP.setName("Bruce");
+        userP.setLastName("Twant");
+        userP.setEmail("dwayne@gmail.com");
+        userP.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userP.setPhone("+353838547265");
+        userP.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userP);
+
+        User userQ = new User();
+        userQ.setName("Bruce");
+        userQ.setLastName("Twant");
+        userQ.setEmail("harry@gmail.com");
+        userQ.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userQ.setPhone("+353838547265");
+        userQ.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userQ);
+
+        User userR = new User();
+        userR.setName("Bruce");
+        userR.setLastName("Twant");
+        userR.setEmail("rebecca@gmail.com");
+        userR.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userR.setPhone("+353838547265");
+        userR.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userR);
+
+        User userS = new User();
+        userS.setName("Bruce");
+        userS.setLastName("Twant");
+        userS.setEmail("eamon@gmail.com");
+        userS.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userS.setPhone("+353838547265");
+        userS.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userS);
+
+        User userT = new User();
+        userT.setName("Bruce");
+        userT.setLastName("Twant");
+        userT.setEmail("lorraine@gmail.com");
+        userT.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userT.setPhone("+353838547265");
+        userT.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userT);
+
+        User userU = new User();
+        userU.setName("Bruce");
+        userU.setLastName("Twant");
+        userU.setEmail("terrence@gmail.com");
+        userU.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userU.setPhone("+353838547265");
+        userU.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userU);
+
+        for(User user : listOfUser){
+            userRepositoryInMemory.create(user);
+        }
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> userRepositoryInMemory.listUser("Bru"),
+                "");
+    }
 }

@@ -66,6 +66,8 @@ public class UserRepositoryInMemory implements UserRepository{
 
         List<User> listOfUser = new ArrayList<>();
 
+        int _numberUserElement = 10;
+
         if(userSearch.length() < 2){
             throw new IllegalArgumentException("At least two characters have to be provided");
         }
@@ -75,9 +77,13 @@ public class UserRepositoryInMemory implements UserRepository{
                 if(user.getName().contains(userSearch)
                     && !storageUserDeleted.containsKey(user.getEmail())){
                     listOfUser.add(user);
+                    if(listOfUser.size() == _numberUserElement){
+                        throw new IllegalArgumentException("There is a limitation of " + _numberUserElement + " users to be displayed.");
+                    }
                 }
             }
         );
+
         return listOfUser;
     }
 }
