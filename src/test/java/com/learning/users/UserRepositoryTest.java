@@ -458,7 +458,8 @@ public class UserRepositoryTest {
         }
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> userRepositoryInMemory.listUser("Bru"),
-                "");
+                () -> userRepositoryInMemory.listUser("Bru")
+        );
+
     }
 }

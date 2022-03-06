@@ -78,7 +78,7 @@ public class UserRepositoryInMemory implements UserRepository{
                     && !storageUserDeleted.containsKey(user.getEmail())){
                     listOfUser.add(user);
                     if(listOfUser.size() == _numberUserElement){
-                        throw new IllegalArgumentException("There is a limitation of " + _numberUserElement + " users to be displayed.");
+                        throw new IllegalArgumentException();
                     }
                 }
             }
