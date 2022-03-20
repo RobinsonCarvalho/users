@@ -1,31 +1,71 @@
 package com.learning.users;
 
 import com.learning.users.model.User;
-import com.learning.users.repository.UserRepository;
 import com.learning.users.repository.UserRepositoryInMemory;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDate;
 
 public class UserRepositoryTest {
 
     @Test
     void shouldCreateUser(){
-        UserRepository userRepository = new UserRepositoryInMemory();
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
-        user.setName("Joaquim");
-        user.setLastName("Gusmao");
-        user.setEmail("joaquim.gusmao@gmail.com");
-        user.setDateOfBirth(LocalDate.of(1975,12, 30));
+        user.setName("Reynold");
+        user.setLastName("O'Shean");
+        user.setEmail("reynold.oshean.gusmao@gmail.com");
+        user.setDateOfBirth(LocalDate.of(2000, 5, 2));
         user.setPhone("+353834185473");
-        user.setGitHubProfile("http://www.linkedin.com/jgusmao/");
-        userRepository.create(user);
-        Assertions.assertEquals(1, userRepository.count());
+        user.setGitHubProfile("http://www.linkedin.com");
+        userRepositoryInMemory.create(user);
+        Assertions.assertEquals(1, userRepositoryInMemory.count());
+    }
+
+    @Test
+    void shouldNotCreateUser(){
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("");
+        user.setLastName("Batistini");
+        user.setEmail("c.batistini@gmail.com");
+        user.setDateOfBirth(LocalDate.of(2000, 5, 2));
+        user.setPhone("+353834185473");
+        user.setGitHubProfile("http://www.linkedin.com/batistini");
+        Assertions.assertThrows(ConstraintViolationException.class,
+                () -> userRepositoryInMemory.create(user)
+        );
+    }
+
+    @Test
+    void shouldNotReplicateUser(){
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
+
+        User newUser = new User();
+        newUser.setName("Roy");
+        newUser.setLastName("Stuart");
+        newUser.setEmail("jmiller@gmail.com");
+        newUser.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        newUser.setPhone("+353834754577");
+        newUser.setGitHubProfile("http://www.linkedin.com/roy");
+        Assertions.assertThrows(KeyAlreadyExistsException.class,
+                ()-> userRepositoryInMemory.create(newUser));
     }
 
     @Test
     void shouldGetUserData(){
-        UserRepository userRepository = new UserRepositoryInMemory();
+        UserRepositoryInMemory userRepository = new UserRepositoryInMemory();
         User user = new User();
         user.setName("Bruce");
         user.setLastName("Twant");
@@ -43,6 +83,7 @@ public class UserRepositoryTest {
                 ()-> Assertions.assertEquals(LocalDate.of(1975,12, 30), user.getDateOfBirth()),
                 ()-> Assertions.assertEquals("+353838547265", user.getPhone()),
                 ()-> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
+
         );
     }
 }
