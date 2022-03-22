@@ -28,6 +28,7 @@ public class UserRepositoryTest {
 
     @Test
     void shouldNotCreateUser(){
+
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
         user.setName("");
@@ -39,10 +40,12 @@ public class UserRepositoryTest {
         Assertions.assertThrows(ConstraintViolationException.class,
                 () -> userRepositoryInMemory.create(user)
         );
+
     }
 
     @Test
     void shouldNotReplicateUser(){
+
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
         user.setName("John");
@@ -63,10 +66,12 @@ public class UserRepositoryTest {
         Assertions.assertThrows(KeyAlreadyExistsException.class,
                 ()-> userRepositoryInMemory.create(newUser)
         );
+
     }
 
     @Test
     void shouldUpdateDataFromTheUser(){
+
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
         user.setName("John");
@@ -83,10 +88,12 @@ public class UserRepositoryTest {
         User newUser;
         newUser = userRepositoryInMemory.read(user.getEmail());
         Assertions.assertEquals("Miller Roosevelt", newUser.getLastName());
+
     }
 
     @Test
     void shouldNotUpdateUserWhenFieldValueIsMissing(){
+
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
         user.setName("John");
@@ -100,10 +107,12 @@ public class UserRepositoryTest {
         Assertions.assertThrows(ConstraintViolationException.class,
                 ()-> userRepositoryInMemory.update(user)
         );
+
     }
 
     @Test
     void shouldWarnWhenUserNotFound(){
+
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         User user = new User();
         user.setName("Mary");
@@ -116,10 +125,12 @@ public class UserRepositoryTest {
         Assertions.assertThrows(InvalidKeyException.class,
                 ()-> userRepositoryInMemory.read(user.getEmail())
         );
+
     }
 
     @Test
     void shouldGetUserData(){
+
         UserRepositoryInMemory userRepository = new UserRepositoryInMemory();
         User user = new User();
         user.setName("Bruce");
@@ -139,5 +150,6 @@ public class UserRepositoryTest {
                 ()-> Assertions.assertEquals("+353838547265", user.getPhone()),
                 ()-> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
         );
+
     }
 }
