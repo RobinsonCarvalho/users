@@ -3,6 +3,7 @@ package com.learning.users.model;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class User {
 
@@ -30,6 +31,9 @@ public class User {
 
     @URL(message = "The GitHub profile informed could not be verified as a valid one")
     private String gitHubProfile;
+
+    @FutureOrPresent
+    private LocalDateTime updatedAt;
 
     public int getId() {
         return id;
@@ -87,4 +91,11 @@ public class User {
         this.gitHubProfile = gitHubProfile;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

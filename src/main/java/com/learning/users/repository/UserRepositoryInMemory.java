@@ -28,43 +28,23 @@ public class UserRepositoryInMemory implements UserRepository{
 
     public void update(User user){
 
-        Map<String, LocalDateTime> storageUserUpdated = new HashMap<>();
-
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
-
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
         }
-        else if(!mapStorage.containsKey(user.getEmail())){
-            throw new InvalidKeyException(user.getEmail());
-        }
-      else{
 
-            User userUpd;
+        if(user.getId() == mapStorage.get(user.getEmail()).getId()) {
 
-            userUpd = mapStorage.get(user.getEmail());
-
-            if(user.getId() != userUpd.getId()){
-                throw new IllegalArgumentException();
-            }
-
-            userUpd.setName(user.getName());
-            userUpd.setLastName(user.getLastName());
-            userUpd.setDateOfBirth(user.getDateOfBirth());
-            userUpd.setEmail(user.getEmail());
-            userUpd.setPhone(user.getPhone());
-            userUpd.setGitHubProfile(user.getGitHubProfile());
+            User userUpd = mapStorage.get(user.getEmail());
+            userUpd.setUpdatedAt(LocalDateTime.now());
             mapStorage.replace(userUpd.getEmail(), user, userUpd);
-
-            //Created to store the date which the user was updated
-            if(storageUserUpdated.containsKey(userUpd.getEmail())){
-                storageUserUpdated.replace(userUpd.getEmail(), LocalDateTime.now());
-            }
-            else{
-                storageUserUpdated.put(userUpd.getEmail(), LocalDateTime.now());
-            }
-
             System.out.println("User data updated successfully.");
+
+        }
+        else{
+
+            throw new IllegalArgumentException();
+
         }
 
     }
