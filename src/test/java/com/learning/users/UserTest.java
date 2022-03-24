@@ -4,6 +4,7 @@ import com.learning.users.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserTest {
 
@@ -19,7 +20,6 @@ public class UserTest {
         user.setPhone("+353834185473");
         user.setGitHubProfile("http://www.linkedin.com");
 
-
         Assertions.assertAll("user",
                 () -> Assertions.assertEquals(1, user.getId()),
                 () -> Assertions.assertEquals("Joaquim", user.getName()),
@@ -28,7 +28,6 @@ public class UserTest {
                 () -> Assertions.assertEquals(LocalDate.of(2000, 5, 2), user.getDateOfBirth()),
                 () -> Assertions.assertEquals("+353834185473", user.getPhone()),
                 () -> Assertions.assertEquals("http://www.linkedin.com", user.getGitHubProfile())
-                //() -> Assertions.assertTrue(InetAddress.getByName(user.getGitHubProfile()).isReachable(3000))
         );
     }
 
@@ -43,6 +42,7 @@ public class UserTest {
         user.setDateOfBirth(LocalDate.of(1988, 9, 2));
         user.setPhone("+353834587412");
         user.setGitHubProfile("http://www.linkedin.com");
+        user.setDeletedAt(null);
 
         Assertions.assertAll("user",
                 () -> Assertions.assertEquals(1, user.getId()),
@@ -51,8 +51,8 @@ public class UserTest {
                 () -> Assertions.assertEquals( "garryconnor@gmail.com", user.getEmail()),
                 () -> Assertions.assertEquals( LocalDate.parse("1988-09-02"), user.getDateOfBirth()),
                 () -> Assertions.assertEquals( "+353834587412", user.getPhone()),
-                () -> Assertions.assertEquals( "http://www.linkedin.com", user.getGitHubProfile())
-
+                () -> Assertions.assertEquals( "http://www.linkedin.com", user.getGitHubProfile()),
+                () -> Assertions.assertNull(user.getUpdatedAt())
         );
     }
 
