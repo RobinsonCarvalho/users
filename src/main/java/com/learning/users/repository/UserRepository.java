@@ -1,18 +1,10 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-import jakarta.validation.Validation;
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import java.util.List;
 
 public interface UserRepository {
-
-    jakarta.validation.Validator VALIDATOR = Validation.byDefaultProvider()
-            .configure()
-            .messageInterpolator(new ParameterMessageInterpolator())
-            .buildValidatorFactory()
-            .getValidator();
 
     void create(User user);
 
@@ -20,7 +12,7 @@ public interface UserRepository {
 
     User read(String email);
 
-    void delete(String email);
+    void delete(User user);
 
     int count();
 
