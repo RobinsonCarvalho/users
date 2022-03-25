@@ -32,10 +32,10 @@ public class User {
     @URL(message = "The GitHub profile informed could not be verified as a valid one")
     private String gitHubProfile;
 
-    @FutureOrPresent
+    @PastOrPresent
     private LocalDateTime updatedAt;
 
-    @FutureOrPresent
+    @PastOrPresent
     private LocalDateTime deletedAt;
 
     public int getId() {

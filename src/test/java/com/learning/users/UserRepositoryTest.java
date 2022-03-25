@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -134,19 +135,87 @@ public class UserRepositoryTest {
     void shouldDeleteUserRequested(){
 
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
-        User firstUser = new User();
-        firstUser.setName("John");
-        firstUser.setLastName("Miller");
-        firstUser.setEmail("jmiller@gmail.com");
-        firstUser.setDateOfBirth(LocalDate.of(1955, 7, 30));
-        firstUser.setPhone("+353834178265");
-        firstUser.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(firstUser);
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1955, 7, 30));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
 
-        userRepositoryInMemory.delete(firstUser);
+        userRepositoryInMemory.delete(user);
 
-        Assertions.assertThrows(InvalidKeyException.class,
-                () -> userRepositoryInMemory.read(firstUser.getEmail())
+        Assertions.assertThrows(IllegalArgumentException.class,
+                        () -> userRepositoryInMemory.read(user.getEmail())
+        );
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserForDeletionNotFound(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1955, 7, 30));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                        () -> {
+                            user.setEmail("jmillernotstored@gmail.com");
+                            userRepositoryInMemory.delete(user);
+                        }
+        );
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenIdUserDiffersFromStoredOne(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1955, 7, 30));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () ->{
+                    User userCheck = new User();
+                    userCheck.setId(22);
+                    userCheck.setEmail("jmiller@gmail.com");
+                    userRepositoryInMemory.delete(userCheck);
+                }
+        );
+
+    }
+
+    @Test
+    void shouldThrowIllegalExceptionWhenUserNotActive(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1955, 7, 30));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        user.setDeletedAt(LocalDateTime.now());
+        userRepositoryInMemory.create(user);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () ->{
+                    userRepositoryInMemory.delete(user);
+                }
         );
 
     }
@@ -158,7 +227,7 @@ public class UserRepositoryTest {
         User user = new User();
         user.setName("Bruce");
         user.setLastName("Twant");
-        user.setEmail("brucet@gmail.com");
+        user.setEmail("brucetwant@gmail.com");
         user.setDateOfBirth(LocalDate.of(1975, 12, 30));
         user.setPhone("+353838547265");
         user.setGitHubProfile("http://www.linledin.com/brucetwant/");
@@ -168,7 +237,7 @@ public class UserRepositoryTest {
                 () -> Assertions.assertEquals(1, user.getId()),
                 () -> Assertions.assertEquals("Bruce", user.getName()),
                 () -> Assertions.assertEquals("Twant", user.getLastName()),
-                () -> Assertions.assertEquals("brucet@gmail.com", user.getEmail()),
+                () -> Assertions.assertEquals("brucetwant@gmail.com", user.getEmail()),
                 () -> Assertions.assertEquals(LocalDate.of(1975, 12, 30), user.getDateOfBirth()),
                 () -> Assertions.assertEquals("+353838547265", user.getPhone()),
                 () -> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
@@ -257,7 +326,7 @@ public class UserRepositoryTest {
         User userF = new User();
         userF.setName("Bruce");
         userF.setLastName("Twant");
-        userF.setEmail("brucet@gmail.com");
+        userF.setEmail("brucetwant@gmail.com");
         userF.setDateOfBirth(LocalDate.of(1975,12, 30));
         userF.setPhone("+353838547265");
         userF.setGitHubProfile("http://www.linledin.com/brucetwant/");
@@ -267,26 +336,91 @@ public class UserRepositoryTest {
             userRepositoryInMemory.create(user);
         }
 
-        Assertions.assertEquals(2, userRepositoryInMemory.listUser("Jo").size());
+        Assertions.assertEquals(2, userRepositoryInMemory.list(false, 10, "Jo").size());
     }
 
     @Test
-    void shouldNotSearchIfParameterDoesNotMeetTheRequirements(){
+    void shouldReturnUserAsParameterized(){
 
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
-        User user = new User();
-        user.setName("Bruce");
-        user.setLastName("Twant");
-        user.setEmail("brucet@gmail.com");
-        user.setDateOfBirth(LocalDate.of(1975,12, 30));
-        user.setPhone("+353838547265");
-        user.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        List<User> listOfUser = new ArrayList<>();
 
-        userRepositoryInMemory.create(user);
+        User userJ1 = new User();
+        userJ1.setName("John");
+        userJ1.setLastName("Miller");
+        userJ1.setEmail("mellanie@gmail.com");
+        userJ1.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ1.setPhone("+353834178265");
+        userJ1.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userJ1.setDeletedAt(LocalDateTime.now());
+        listOfUser.add(userJ1);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
-            () -> userRepositoryInMemory.listUser(""),
-            "At least two characters have to be provided");
+        User userJ2 = new User();
+        userJ2.setName("Joseph");
+        userJ2.setLastName("Stuart");
+        userJ2.setEmail("bernard@gmail.com");
+        userJ2.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ2.setPhone("+353834754577");
+        userJ2.setGitHubProfile("http://www.linkedin.com/joseph");
+        listOfUser.add(userJ2);
+
+        User userJ3 = new User();
+        userJ3.setName("John");
+        userJ3.setLastName("Miller");
+        userJ3.setEmail("jmiller@gmail.com");
+        userJ3.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ3.setPhone("+353834178265");
+        userJ3.setGitHubProfile("http://www.linkedin.com/jmiller");
+        listOfUser.add(userJ3);
+
+        User userB1 = new User();
+        userB1.setName("Bruna");
+        userB1.setLastName("Teixeira");
+        userB1.setEmail("brucetwant@gmail.com");
+        userB1.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userB1.setPhone("+353838547265");
+        userB1.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        userB1.setDeletedAt(LocalDateTime.now());
+        listOfUser.add(userB1);
+
+        User userB2 = new User();
+        userB2.setName("Bruce");
+        userB2.setLastName("Twant");
+        userB2.setEmail("anthony@gmail.com");
+        userB2.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userB2.setPhone("+353838547265");
+        userB2.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userB2);
+
+        User userB3 = new User();
+        userB3.setName("Bruin");
+        userB3.setLastName("Scarfir");
+        userB3.setEmail("george@gmail.com");
+        userB3.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userB3.setPhone("+353838547265");
+        userB3.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userB3);
+
+        for(User user : listOfUser){
+            userRepositoryInMemory.create(user);
+        }
+
+        Assertions.assertAll(
+
+                () -> Assertions
+                        .assertEquals(6, userRepositoryInMemory
+                                .list(false,10,"").size()),
+
+                () -> Assertions.assertEquals(4, userRepositoryInMemory
+                                .list(true,50,"").size()),
+
+                () -> Assertions.assertTrue(userRepositoryInMemory
+                        .list(false,4,"NoReturn").isEmpty()),
+
+                () -> Assertions.assertFalse(userRepositoryInMemory
+                        .list(true,50,"Joseph").isEmpty())
+
+        );
     }
 
     @Test
@@ -295,202 +429,86 @@ public class UserRepositoryTest {
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
         List<User> listOfUser = new ArrayList<>();
 
-        User userA = new User();
-        userA.setName("Reynold");
-        userA.setLastName("O'Shean");
-        userA.setEmail("reynold.oshean@gmail.com");
-        userA.setDateOfBirth(LocalDate.of(2000, 5, 2));
-        userA.setPhone("+353834185473");
-        userA.setGitHubProfile("http://www.linkedin.com");
-        listOfUser.add(userA);
+        User userJ1 = new User();
+        userJ1.setName("John");
+        userJ1.setLastName("Miller");
+        userJ1.setEmail("mellanie@gmail.com");
+        userJ1.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ1.setPhone("+353834178265");
+        userJ1.setGitHubProfile("http://www.linkedin.com/jmiller");
+        listOfUser.add(userJ1);
 
-        User userB = new User();
-        userB.setName("Giuseppe");
-        userB.setLastName("Batistini");
-        userB.setEmail("c.batistini@gmail.com");
-        userB.setDateOfBirth(LocalDate.of(2000, 5, 2));
-        userB.setPhone("+353834185473");
-        userB.setGitHubProfile("http://www.linkedin.com/batistini");
-        listOfUser.add(userB);
+        User userJ2 = new User();
+        userJ2.setName("Joseph");
+        userJ2.setLastName("Stuart");
+        userJ2.setEmail("bernard@gmail.com");
+        userJ2.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ2.setPhone("+353834754577");
+        userJ2.setGitHubProfile("http://www.linkedin.com/joseph");
+        listOfUser.add(userJ2);
 
-        User userC = new User();
-        userC.setName("John");
-        userC.setLastName("Miller");
-        userC.setEmail("mellanie@gmail.com");
-        userC.setDateOfBirth(LocalDate.of(1988, 9, 15));
-        userC.setPhone("+353834178265");
-        userC.setGitHubProfile("http://www.linkedin.com/jmiller");
-        listOfUser.add(userC);
+        User userJ3 = new User();
+        userJ3.setName("John");
+        userJ3.setLastName("Miller");
+        userJ3.setEmail("jmiller@gmail.com");
+        userJ3.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userJ3.setPhone("+353834178265");
+        userJ3.setGitHubProfile("http://www.linkedin.com/jmiller");
+        listOfUser.add(userJ3);
+        
+        User userB1 = new User();
+        userB1.setName("Bruna");
+        userB1.setLastName("Teixeira");
+        userB1.setEmail("brucetwant@gmail.com");
+        userB1.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userB1.setPhone("+353838547265");
+        userB1.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userB1);
+        
+        User userB2 = new User();
+        userB2.setName("Bruce");
+        userB2.setLastName("Twant");
+        userB2.setEmail("anthony@gmail.com");
+        userB2.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userB2.setPhone("+353838547265");
+        userB2.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userB2);
 
-        User userD = new User();
-        userD.setName("Joseph");
-        userD.setLastName("Stuart");
-        userD.setEmail("bernard@gmail.com");
-        userD.setDateOfBirth(LocalDate.of(1988, 9, 15));
-        userD.setPhone("+353834754577");
-        userD.setGitHubProfile("http://www.linkedin.com/joseph");
-        listOfUser.add(userD);
-
-        User userE = new User();
-        userE.setName("Mary");
-        userE.setLastName("Gordon");
-        userE.setEmail("bryan@test.com");
-        userE.setDateOfBirth(LocalDate.of(1988, 9, 15));
-        userE.setPhone("+353834178826");
-        userE.setGitHubProfile("http://www.linkedin.com/marygordon");
-        listOfUser.add(userE);
-
-        User userF = new User();
-        userF.setName("Bruce");
-        userF.setLastName("Twant");
-        userF.setEmail("brucet@gmail.com");
-        userF.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userF.setPhone("+353838547265");
-        userF.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userF);
-
-        User userG = new User();
-        userG.setName("Reynold");
-        userG.setLastName("O'Shean");
-        userG.setEmail("reynold.oshean.gusmao@gmail.com");
-        userG.setDateOfBirth(LocalDate.of(2000, 5, 2));
-        userG.setPhone("+353834185473");
-        userG.setGitHubProfile("http://www.linkedin.com");
-        listOfUser.add(userG);
-
-        User userH = new User();
-        userH.setName("Giuseppe");
-        userH.setLastName("Batistini");
-        userH.setEmail("jeniffer@gmail.com");
-        userH.setDateOfBirth(LocalDate.of(2000, 5, 2));
-        userH.setPhone("+353834185473");
-        userH.setGitHubProfile("http://www.linkedin.com/batistini");
-        listOfUser.add(userH);
-
-        User userI = new User();
-        userI.setName("John");
-        userI.setLastName("Miller");
-        userI.setEmail("jmiller@gmail.com");
-        userI.setDateOfBirth(LocalDate.of(1988, 9, 15));
-        userI.setPhone("+353834178265");
-        userI.setGitHubProfile("http://www.linkedin.com/jmiller");
-        listOfUser.add(userI);
-
-        User userJ = new User();
-        userJ.setName("Joseph");
-        userJ.setLastName("Stuart");
-        userJ.setEmail("josephstuart@gmail.com");
-        userJ.setDateOfBirth(LocalDate.of(1988, 9, 15));
-        userJ.setPhone("+353834754577");
-        userJ.setGitHubProfile("http://www.linkedin.com/joseph");
-        listOfUser.add(userJ);
-
-        User userK = new User();
-        userK.setName("Mary");
-        userK.setLastName("Gordon");
-        userK.setEmail("emailinexistent@test.com");
-        userK.setDateOfBirth(LocalDate.of(1988, 9, 15));
-        userK.setPhone("+353834178826");
-        userK.setGitHubProfile("http://www.linkedin.com/marygordon");
-        listOfUser.add(userK);
-
-        User userL = new User();
-        userL.setName("Bruce");
-        userL.setLastName("Twant");
-        userL.setEmail("anthony@gmail.com");
-        userL.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userL.setPhone("+353838547265");
-        userL.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userL);
-
-        User userM = new User();
-        userM.setName("Bruce");
-        userM.setLastName("Twant");
-        userM.setEmail("george@gmail.com");
-        userM.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userM.setPhone("+353838547265");
-        userM.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userM);
-
-        User userN = new User();
-        userN.setName("Bruce");
-        userN.setLastName("Twant");
-        userN.setEmail("michael@gmail.com");
-        userN.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userN.setPhone("+353838547265");
-        userN.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userN);
-
-        User userO = new User();
-        userO.setName("Bruce");
-        userO.setLastName("Twant");
-        userO.setEmail("kevyn@gmail.com");
-        userO.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userO.setPhone("+353838547265");
-        userO.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userO);
-
-        User userP = new User();
-        userP.setName("Bruce");
-        userP.setLastName("Twant");
-        userP.setEmail("dwayne@gmail.com");
-        userP.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userP.setPhone("+353838547265");
-        userP.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userP);
-
-        User userQ = new User();
-        userQ.setName("Bruce");
-        userQ.setLastName("Twant");
-        userQ.setEmail("harry@gmail.com");
-        userQ.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userQ.setPhone("+353838547265");
-        userQ.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userQ);
-
-        User userR = new User();
-        userR.setName("Bruce");
-        userR.setLastName("Twant");
-        userR.setEmail("rebecca@gmail.com");
-        userR.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userR.setPhone("+353838547265");
-        userR.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userR);
-
-        User userS = new User();
-        userS.setName("Bruce");
-        userS.setLastName("Twant");
-        userS.setEmail("eamon@gmail.com");
-        userS.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userS.setPhone("+353838547265");
-        userS.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userS);
-
-        User userT = new User();
-        userT.setName("Bruce");
-        userT.setLastName("Twant");
-        userT.setEmail("lorraine@gmail.com");
-        userT.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userT.setPhone("+353838547265");
-        userT.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userT);
-
-        User userU = new User();
-        userU.setName("Bruce");
-        userU.setLastName("Twant");
-        userU.setEmail("terrence@gmail.com");
-        userU.setDateOfBirth(LocalDate.of(1975,12, 30));
-        userU.setPhone("+353838547265");
-        userU.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        listOfUser.add(userU);
+        User userB3 = new User();
+        userB3.setName("Bruin");
+        userB3.setLastName("Scarfir");
+        userB3.setEmail("george@gmail.com");
+        userB3.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userB3.setPhone("+353838547265");
+        userB3.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        listOfUser.add(userB3);
 
         for(User user : listOfUser){
             userRepositoryInMemory.create(user);
         }
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> userRepositoryInMemory.listUser("Bru")
+                () -> userRepositoryInMemory
+                        .list(false,
+                                2,
+                                "Bru"
+                )
         );
 
     }
+
+    @Test
+    void shouldThrowExceptionDueToQuantityRequestedExceedMaximumParameterized() {
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> userRepositoryInMemory
+                        .list(false,
+                                51,
+                                "Bru"
+                )
+        );
+    }
+
 }

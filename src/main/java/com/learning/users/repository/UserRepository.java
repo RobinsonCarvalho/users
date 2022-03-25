@@ -16,6 +16,6 @@ public interface UserRepository {
 
     int count();
 
-    List<User> listUser(String userSearch);
+    List<User> list(boolean active, int limitToList, String name);
 
 }
