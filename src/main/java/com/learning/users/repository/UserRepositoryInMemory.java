@@ -1,27 +1,54 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validation;
+//import jakarta.validation.ConstraintViolation;
+//import jakarta.validation.ConstraintViolationException;
+//import jakarta.validation.Validation;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.Validation;
+
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+
 import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@SpringBootApplication
+@RestController
 public class UserRepositoryInMemory implements UserRepository{
 
+    /*
     jakarta.validation.Validator VALIDATOR = Validation.byDefaultProvider()
             .configure()
             .messageInterpolator(new ParameterMessageInterpolator())
             .buildValidatorFactory()
             .getValidator();
+    */
+
+    javax.validation.Validator VALIDATOR = Validation.byDefaultProvider()
+            .configure()
+            .messageInterpolator(Validation.buildDefaultValidatorFactory().getMessageInterpolator())
+            .buildValidatorFactory()
+            .getValidator();
 
     Map<String, User> mapStorage = new HashMap<>();
 
+    public static void main(String[] args){
+        SpringApplication.run(UserRepositoryInMemory.class, args);
+    }
+
     @Override
+    @PutMapping("/create-user")
     public void create(User user){
 
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);

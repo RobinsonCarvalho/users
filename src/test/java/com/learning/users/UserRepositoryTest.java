@@ -2,11 +2,11 @@ package com.learning.users;
 
 import com.learning.users.model.User;
 import com.learning.users.repository.UserRepositoryInMemory;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.KeyAlreadyExistsException;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
