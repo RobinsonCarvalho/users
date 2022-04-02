@@ -5,7 +5,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.management.openmbean.InvalidKeyException;
-import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -13,92 +12,94 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-<span class="fc" id="L16">public class UserRepositoryInMemory implements UserRepository{</span>
+<span class="fc" id="L15">public class UserRepositoryInMemory implements UserRepository{</span>
 
-<span class="fc" id="L18">    javax.validation.Validator VALIDATOR = Validation.byDefaultProvider()</span>
-<span class="fc" id="L19">            .configure()</span>
-<span class="fc" id="L20">            .messageInterpolator(Validation.buildDefaultValidatorFactory().getMessageInterpolator())</span>
-<span class="fc" id="L21">            .buildValidatorFactory()</span>
-<span class="fc" id="L22">            .getValidator();</span>
+<span class="fc" id="L17">    javax.validation.Validator VALIDATOR = Validation.byDefaultProvider()</span>
+<span class="fc" id="L18">            .configure()</span>
+<span class="fc" id="L19">            .messageInterpolator(Validation.buildDefaultValidatorFactory().getMessageInterpolator())</span>
+<span class="fc" id="L20">            .buildValidatorFactory()</span>
+<span class="fc" id="L21">            .getValidator();</span>
 
-<span class="fc" id="L24">    Map&lt;String, User&gt; mapStorage = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L23">    Map&lt;Integer, User&gt; mapStorage = new HashMap&lt;&gt;();</span>
 
     @Override
     public void create(User user){
 
-<span class="fc" id="L29">        Set&lt;ConstraintViolation&lt;User&gt;&gt; violations = VALIDATOR.validate(user);</span>
-<span class="fc bfc" id="L30" title="All 2 branches covered.">        if(!violations.isEmpty()){</span>
-<span class="fc" id="L31">            throw new ConstraintViolationException(violations);</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        }else if(mapStorage.containsKey(user.getEmail())){</span>
-<span class="fc" id="L33">            throw new KeyAlreadyExistsException(user.getEmail());</span>
+<span class="fc" id="L28">        Set&lt;ConstraintViolation&lt;User&gt;&gt; violations = VALIDATOR.validate(user);</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if(!violations.isEmpty()){</span>
+<span class="fc" id="L30">            throw new ConstraintViolationException(violations);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        }else if(mapStorage.containsKey(user.getId())){</span>
+<span class="nc" id="L32">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L33">        }else if(mapStorage.values().stream()</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">                .anyMatch(store -&gt; store.getEmail().equals(user.getEmail()))){</span>
+<span class="fc" id="L35">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L36">        int idUser = mapStorage.size() + 1;</span>
-<span class="fc" id="L37">        user.setId(idUser);</span>
-<span class="fc" id="L38">        mapStorage.put(user.getEmail(), user);</span>
-<span class="fc" id="L39">        System.out.println(&quot;User created successfully.&quot;);</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L38">        int idUser = mapStorage.size() + 1;</span>
+<span class="fc" id="L39">        user.setId(idUser);</span>
+<span class="fc" id="L40">        mapStorage.put(user.getId(), user);</span>
+<span class="fc" id="L41">        System.out.println(&quot;User created successfully.&quot;);</span>
+<span class="fc" id="L42">    }</span>
 
     @Override
     public void update(User user){
 
-<span class="fc" id="L45">        Set&lt;ConstraintViolation&lt;User&gt;&gt; violations = VALIDATOR.validate(user);</span>
+<span class="fc" id="L47">        Set&lt;ConstraintViolation&lt;User&gt;&gt; violations = VALIDATOR.validate(user);</span>
 
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        if(!violations.isEmpty()){</span>
-<span class="fc" id="L48">            throw new ConstraintViolationException(violations);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if(!violations.isEmpty()){</span>
+<span class="fc" id="L50">            throw new ConstraintViolationException(violations);</span>
         }
 
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if(user.getId() == mapStorage.get(user.getEmail()).getId()) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if(user.getId() == mapStorage.get(user.getId()).getId()) {</span>
 
-<span class="fc" id="L53">            User userUpd = mapStorage.get(user.getEmail());</span>
-<span class="fc" id="L54">            userUpd.setUpdatedAt(LocalDateTime.now());</span>
-<span class="fc" id="L55">            mapStorage.replace(userUpd.getEmail(), user, userUpd);</span>
-<span class="fc" id="L56">            System.out.println(&quot;User data updated successfully.&quot;);</span>
+<span class="fc" id="L55">            User userUpd = mapStorage.get(user.getId());</span>
+<span class="fc" id="L56">            userUpd.setUpdatedAt(LocalDateTime.now());</span>
+<span class="fc" id="L57">            mapStorage.replace(userUpd.getId(), user, userUpd);</span>
+<span class="fc" id="L58">            System.out.println(&quot;User data updated successfully.&quot;);</span>
 
-<span class="fc" id="L58">        }</span>
+<span class="fc" id="L60">        }</span>
         else{
-
-<span class="fc" id="L61">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L62">            throw new NullPointerException();</span>
         }
 
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L65">    }</span>
 
     @Override
     public void delete(User user){
 
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        if(!mapStorage.containsKey(user.getEmail())) {</span>
-<span class="fc" id="L70">            throw new InvalidKeyException(user.getEmail());</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if(!mapStorage.containsKey(user.getId())) {</span>
+<span class="fc" id="L71">            throw new InvalidKeyException();</span>
         }
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        else if(user.getId() != mapStorage.get(user.getEmail()).getId()){</span>
-<span class="fc" id="L73">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        else if(user.getId() != mapStorage.get(user.getId()).getId()){</span>
+<span class="nc" id="L74">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        else if(mapStorage.get(user.getEmail()).getDeletedAt() != null){</span>
-<span class="fc" id="L76">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        else if(mapStorage.get(user.getId()).getDeletedAt() != null){</span>
+<span class="fc" id="L77">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L79">        user.setDeletedAt(LocalDateTime.now());</span>
-<span class="fc" id="L80">        mapStorage.replace(user.getEmail(), user);</span>
-<span class="fc" id="L81">        System.out.println(&quot;User &quot; + user.getEmail().toUpperCase() + &quot; was deleted successfully.&quot;);</span>
+<span class="fc" id="L80">        user.setDeletedAt(LocalDateTime.now());</span>
+<span class="fc" id="L81">        mapStorage.replace(user.getId(), user);</span>
+<span class="fc" id="L82">        System.out.println(&quot;User &quot; + user.getId() + &quot; was deleted successfully.&quot;);</span>
 
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L84">    }</span>
 
     @Override
-    public User read(String email){
+    public User read(int id){
 
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if(!mapStorage.containsKey(email)</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">                || mapStorage.get(email).getDeletedAt() != null){</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if(!mapStorage.containsKey(id)</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">                || mapStorage.get(id).getDeletedAt() != null){</span>
 
-<span class="fc" id="L91">            throw new InvalidKeyException(email);</span>
+<span class="fc" id="L92">            throw new InvalidKeyException();</span>
         }
 
-<span class="fc" id="L94">        return mapStorage.get(email);</span>
+<span class="fc" id="L95">        return mapStorage.get(id);</span>
 
     }
 
     @Override
     public int count(){
 
-<span class="fc" id="L101">        return mapStorage.size();</span>
+<span class="fc" id="L102">        return mapStorage.size();</span>
     }
 
     /*
@@ -111,41 +112,41 @@ import java.util.stream.Collectors;
     @Override
     public List&lt;User&gt; list(boolean active, int limitToList, String name){
 
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        if(limitToList &gt; 50){</span>
-<span class="fc" id="L115">            throw new IllegalArgumentException(&quot;The maximum users requests must be 50&quot;);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if(limitToList &gt; 50){</span>
+<span class="fc" id="L116">            throw new IllegalArgumentException(&quot;The maximum users requests must be 50&quot;);</span>
         }
 
         List&lt;User&gt; listOfUser;
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if(!active){</span>
-<span class="fc bfc" id="L121" title="All 2 branches covered.">            if(name.length() == 0) {</span>
-<span class="fc" id="L122">                listOfUser = mapStorage.values().stream()</span>
-<span class="fc" id="L123">                        .collect(Collectors.toList());</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if(!active){</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            if(name.length() == 0) {</span>
+<span class="fc" id="L123">                listOfUser = mapStorage.values().stream()</span>
+<span class="fc" id="L124">                        .collect(Collectors.toList());</span>
             }
             else{
-<span class="fc" id="L126">                listOfUser = mapStorage.values().stream()</span>
-<span class="fc" id="L127">                        .filter(user -&gt; user.getName().contains(name))</span>
-<span class="fc" id="L128">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L127">                listOfUser = mapStorage.values().stream()</span>
+<span class="fc" id="L128">                        .filter(user -&gt; user.getName().contains(name))</span>
+<span class="fc" id="L129">                        .collect(Collectors.toList());</span>
             }
         }
         else {
-<span class="fc bfc" id="L132" title="All 2 branches covered.">            if(name.length() &gt; 0) {</span>
-<span class="fc" id="L133">                listOfUser = mapStorage.values().stream()</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">                        .filter(user -&gt; user.getDeletedAt() == null)</span>
-<span class="fc" id="L135">                        .filter(user -&gt; user.getName().contains(name))</span>
-<span class="fc" id="L136">                        .collect(Collectors.toList());</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            if(name.length() &gt; 0) {</span>
+<span class="fc" id="L134">                listOfUser = mapStorage.values().stream()</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                        .filter(user -&gt; user.getDeletedAt() == null)</span>
+<span class="fc" id="L136">                        .filter(user -&gt; user.getName().contains(name))</span>
+<span class="fc" id="L137">                        .collect(Collectors.toList());</span>
             }
             else{
-<span class="fc" id="L139">                listOfUser = mapStorage.values().stream()</span>
-<span class="fc bfc" id="L140" title="All 2 branches covered.">                        .filter(user -&gt; user.getDeletedAt() == null)</span>
-<span class="fc" id="L141">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L140">                listOfUser = mapStorage.values().stream()</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">                        .filter(user -&gt; user.getDeletedAt() == null)</span>
+<span class="fc" id="L142">                        .collect(Collectors.toList());</span>
             }
         }
 
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if(listOfUser.size() &gt; limitToList){</span>
-<span class="fc" id="L146">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if(listOfUser.size() &gt; limitToList){</span>
+<span class="fc" id="L147">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L148">        return listOfUser;</span>
+<span class="fc" id="L149">        return listOfUser;</span>
     }
 
 }

@@ -1,10 +1,6 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -16,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RestController
 public class UserRepositoryInMemory implements UserRepository{
 
     javax.validation.Validator VALIDATOR = Validation.byDefaultProvider()
@@ -28,8 +23,7 @@ public class UserRepositoryInMemory implements UserRepository{
     Map<Integer, User> mapStorage = new HashMap<>();
 
     @Override
-    @PostMapping("/create")
-    public void create(@RequestBody User user){
+    public void create(User user){
 
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
         if(!violations.isEmpty()){
