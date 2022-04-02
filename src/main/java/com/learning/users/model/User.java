@@ -1,8 +1,9 @@
 package com.learning.users.model;
 
-//import jakarta.validation.constraints.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

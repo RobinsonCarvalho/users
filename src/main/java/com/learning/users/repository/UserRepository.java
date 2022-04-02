@@ -1,7 +1,6 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-
 import java.util.List;
 
 public interface UserRepository {
@@ -10,7 +9,7 @@ public interface UserRepository {
 
     void update(User user);
 
-    User read(String email);
+    User read(int id);
 
     void delete(User user);
 

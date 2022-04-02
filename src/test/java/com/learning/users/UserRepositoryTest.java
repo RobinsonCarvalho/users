@@ -66,7 +66,7 @@ public class UserRepositoryTest {
         newUser.setDateOfBirth(LocalDate.of(1988, 9, 15));
         newUser.setPhone("+353834754577");
         newUser.setGitHubProfile("http://www.linkedin.com/roy");
-        Assertions.assertThrows(KeyAlreadyExistsException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> userRepositoryInMemory.create(newUser)
         );
 
@@ -90,7 +90,7 @@ public class UserRepositoryTest {
         userRepositoryInMemory.update(user);
 
         User newUser;
-        newUser = userRepositoryInMemory.read(user.getEmail());
+        newUser = userRepositoryInMemory.read(user.getId());
         Assertions.assertEquals("Miller Roosevelt", newUser.getLastName());
 
     }
@@ -127,7 +127,7 @@ public class UserRepositoryTest {
         user.setGitHubProfile("http://www.linkedin.com/marygordon");
 
         Assertions.assertThrows(InvalidKeyException.class,
-                () -> userRepositoryInMemory.read(user.getEmail())
+                () -> userRepositoryInMemory.read(user.getId())
         );
     }
 
@@ -146,8 +146,8 @@ public class UserRepositoryTest {
 
         userRepositoryInMemory.delete(user);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
-                        () -> userRepositoryInMemory.read(user.getEmail())
+        Assertions.assertThrows(InvalidKeyException.class,
+                        () -> userRepositoryInMemory.read(user.getId())
         );
 
     }
@@ -167,7 +167,7 @@ public class UserRepositoryTest {
 
         Assertions.assertThrows(IllegalArgumentException.class,
                         () -> {
-                            user.setEmail("jmillernotstored@gmail.com");
+                            user.setId(2);
                             userRepositoryInMemory.delete(user);
                         }
         );
@@ -246,7 +246,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenThereWillBeConflictedIdDuringUpdate() {
+    void shouldThrowExceptionWhenBeingConflictedIdDuringUpdate() {
 
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
 
@@ -260,6 +260,7 @@ public class UserRepositoryTest {
         userRepositoryInMemory.create(user);
 
         User userToUpdate = new User();
+        userToUpdate.setId(100);
         userToUpdate.setName("John");
         userToUpdate.setLastName("Miller");
         userToUpdate.setEmail("jmiller@gmail.com");
@@ -267,7 +268,7 @@ public class UserRepositoryTest {
         userToUpdate.setPhone("+0000000000000");
         userToUpdate.setGitHubProfile("http://www.linkedin.com/jmiller");
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(NullPointerException.class,
                 () -> userRepositoryInMemory.update(userToUpdate)
         );
     }
