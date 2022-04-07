@@ -5,7 +5,6 @@ import com.learning.users.repository.UserRepositoryInMemory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import javax.management.openmbean.InvalidKeyException;
-import javax.management.openmbean.KeyAlreadyExistsException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
