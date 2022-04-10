@@ -14,6 +14,10 @@ public interface UserRepository {
 
     void create(User user);
 
+    void update(User user);
+
+    User read(String email);
+
     int count();
 
 }
