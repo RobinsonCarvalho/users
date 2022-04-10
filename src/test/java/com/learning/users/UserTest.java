@@ -42,7 +42,7 @@ public class UserTest {
         user.setDateOfBirth(LocalDate.of(1988, 9, 2));
         user.setPhone("+353834587412");
         user.setGitHubProfile("http://www.linkedin.com");
-
+        user.setDeletedAt(null);
 
         Assertions.assertAll("user",
                 () -> Assertions.assertEquals(1, user.getId()),

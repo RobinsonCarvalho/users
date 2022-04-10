@@ -35,6 +35,9 @@ public class User {
     @PastOrPresent
     private LocalDateTime updatedAt;
 
+    @PastOrPresent
+    private LocalDateTime deletedAt;
+
     public int getId() {
         return id;
     }
@@ -98,4 +101,13 @@ public class User {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
 }
