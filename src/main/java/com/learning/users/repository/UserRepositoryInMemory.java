@@ -1,25 +1,26 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validation;
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
 import javax.management.openmbean.InvalidKeyException;
-import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserRepositoryInMemory implements UserRepository{
 
-    jakarta.validation.Validator VALIDATOR = Validation.byDefaultProvider()
+    javax.validation.Validator VALIDATOR = Validation.byDefaultProvider()
             .configure()
-            .messageInterpolator(new ParameterMessageInterpolator())
+            .messageInterpolator(Validation.buildDefaultValidatorFactory().getMessageInterpolator())
             .buildValidatorFactory()
             .getValidator();
 
-    Map<String, User> mapStorage = new HashMap<>();
+    Map<Integer, User> mapStorage = new HashMap<>();
 
     @Override
     public void create(User user){
@@ -27,13 +28,16 @@ public class UserRepositoryInMemory implements UserRepository{
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
-        }else if(mapStorage.containsKey(user.getEmail())){
-            throw new KeyAlreadyExistsException(user.getEmail());
+        }else if(mapStorage.containsKey(user.getId())){
+            throw new IllegalArgumentException();
+        }else if(mapStorage.values().stream()
+                .anyMatch(store -> store.getEmail().equals(user.getEmail()))){
+            throw new IllegalArgumentException();
         }
 
         int idUser = mapStorage.size() + 1;
         user.setId(idUser);
-        mapStorage.put(user.getEmail(), user);
+        mapStorage.put(user.getId(), user);
         System.out.println("User created successfully.");
     }
 
@@ -46,48 +50,47 @@ public class UserRepositoryInMemory implements UserRepository{
             throw new ConstraintViolationException(violations);
         }
 
-        if(user.getId() == mapStorage.get(user.getEmail()).getId()) {
+        if(user.getId() == mapStorage.get(user.getId()).getId()) {
 
-            User userUpd = mapStorage.get(user.getEmail());
+            User userUpd = mapStorage.get(user.getId());
             userUpd.setUpdatedAt(LocalDateTime.now());
-            mapStorage.replace(userUpd.getEmail(), user, userUpd);
+            mapStorage.replace(userUpd.getId(), user, userUpd);
             System.out.println("User data updated successfully.");
 
         }
         else{
-            throw new IllegalArgumentException();
+            throw new NullPointerException();
         }
     }
 
     @Override
     public void delete(User user){
 
-        if(!mapStorage.containsKey(user.getEmail())) {
-            throw new InvalidKeyException(user.getEmail());
+        if(!mapStorage.containsKey(user.getId())) {
+            throw new InvalidKeyException();
         }
-        else if(user.getId() != mapStorage.get(user.getEmail()).getId()){
+        else if(user.getId() != mapStorage.get(user.getId()).getId()){
             throw new IllegalArgumentException();
         }
-        else if(mapStorage.get(user.getEmail()).getDeletedAt() != null){
+        else if(mapStorage.get(user.getId()).getDeletedAt() != null){
             throw new IllegalArgumentException();
         }
 
         user.setDeletedAt(LocalDateTime.now());
-        mapStorage.replace(user.getEmail(), user);
-        System.out.println("User " + user.getEmail().toUpperCase() + " was deleted successfully.");
+        mapStorage.replace(user.getId(), user);
+        System.out.println("User " + user.getId() + " was deleted successfully.");
 
     }
 
     @Override
-    public User read(String email){
+    public User read(int id){
 
-        if(!mapStorage.containsKey(email)
-                || mapStorage.get(email).getDeletedAt() != null){
+        if(!mapStorage.containsKey(id)
+                || mapStorage.get(id).getDeletedAt() != null){
 
-            throw new InvalidKeyException(email);
+            throw new InvalidKeyException();
         }
-        return mapStorage.get(email);
-
+        return mapStorage.get(id);
     }
 
     @Override

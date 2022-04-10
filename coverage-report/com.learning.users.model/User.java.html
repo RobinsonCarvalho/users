@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">users</a> &gt; <a href="index.source.html" class="el_package">com.learning.users.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.learning.users.model;
 
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
-import java.time.LocalDate;
+import org.hibernate.validator.constraints.UniqueElements;
 
-<span class="fc" id="L7">public class User {</span>
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+<span class="fc" id="L10">public class User {</span>
 
     private int id;
 
@@ -31,61 +34,83 @@ import java.time.LocalDate;
     @URL(message = &quot;The GitHub profile informed could not be verified as a valid one&quot;)
     private String gitHubProfile;
 
+    @PastOrPresent
+    private LocalDateTime updatedAt;
+
+    @PastOrPresent
+    private LocalDateTime deletedAt;
+
     public int getId() {
-<span class="fc" id="L35">        return id;</span>
+<span class="fc" id="L44">        return id;</span>
     }
 
     public void setId(int id) {
-<span class="fc" id="L39">        this.id = id;</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L48">        this.id = id;</span>
+<span class="fc" id="L49">    }</span>
 
     public String getName() {
-<span class="fc" id="L43">        return name;</span>
+<span class="fc" id="L52">        return name;</span>
     }
 
     public void setName(String name) {
-<span class="fc" id="L47">        this.name = name;</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L56">        this.name = name;</span>
+<span class="fc" id="L57">    }</span>
 
     public String getLastName() {
-<span class="fc" id="L51">        return lastName;</span>
+<span class="fc" id="L60">        return lastName;</span>
     }
 
     public void setLastName(String lastName) {
-<span class="fc" id="L55">        this.lastName = lastName;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L64">        this.lastName = lastName;</span>
+<span class="fc" id="L65">    }</span>
 
     public String getEmail() {
-<span class="fc" id="L59">        return email;</span>
+<span class="fc" id="L68">        return email;</span>
     }
 
     public void setEmail(String email) {
-<span class="fc" id="L63">        this.email = email;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L72">        this.email = email;</span>
+<span class="fc" id="L73">    }</span>
 
     public LocalDate getDateOfBirth() {
-<span class="fc" id="L67">        return dateOfBirth;</span>
+<span class="fc" id="L76">        return dateOfBirth;</span>
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
-<span class="fc" id="L71">        this.dateOfBirth = dateOfBirth;</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L80">        this.dateOfBirth = dateOfBirth;</span>
+<span class="fc" id="L81">    }</span>
 
     public String getPhone() {
-<span class="fc" id="L75">        return phone;</span>
+<span class="fc" id="L84">        return phone;</span>
     }
 
     public void setPhone(String phone) {
-<span class="fc" id="L79">        this.phone = phone;</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L88">        this.phone = phone;</span>
+<span class="fc" id="L89">    }</span>
 
     public String getGitHubProfile() {
-<span class="fc" id="L83">        return gitHubProfile;</span>
+<span class="fc" id="L92">        return gitHubProfile;</span>
     }
 
     public void setGitHubProfile(String gitHubProfile) {
-<span class="fc" id="L87">        this.gitHubProfile = gitHubProfile;</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L96">        this.gitHubProfile = gitHubProfile;</span>
+<span class="fc" id="L97">    }</span>
+
+    public LocalDateTime getUpdatedAt() {
+<span class="fc" id="L100">        return updatedAt;</span>
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+<span class="fc" id="L104">        this.updatedAt = updatedAt;</span>
+<span class="fc" id="L105">    }</span>
+
+    public LocalDateTime getDeletedAt() {
+<span class="fc" id="L108">        return deletedAt;</span>
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+<span class="fc" id="L112">        this.deletedAt = deletedAt;</span>
+<span class="fc" id="L113">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
