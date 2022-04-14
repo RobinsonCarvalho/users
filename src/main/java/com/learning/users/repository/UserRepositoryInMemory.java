@@ -1,15 +1,14 @@
 package com.learning.users.repository;
 
 import com.learning.users.model.User;
+import com.learning.users.model.UserNotFoundException;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.management.openmbean.InvalidKeyException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserRepositoryInMemory implements UserRepository{
@@ -56,7 +55,6 @@ public class UserRepositoryInMemory implements UserRepository{
             userUpd.setUpdatedAt(LocalDateTime.now());
             mapStorage.replace(userUpd.getId(), user, userUpd);
             System.out.println("User data updated successfully.");
-
         }
         else{
             throw new NullPointerException();
@@ -144,5 +142,22 @@ public class UserRepositoryInMemory implements UserRepository{
             throw new IllegalArgumentException();
         }
         return listOfUser;
+    }
+
+    @Override
+    public User searchById(int id){
+
+        if(mapStorage.values().stream().filter(user -> user.getId() == id).count() == 0){
+            throw new UserNotFoundException(id);
+        }
+
+        User user = new User();
+
+        for (Map.Entry<Integer, User> entry : mapStorage.entrySet()) {
+            if (entry.getKey().equals(entry.getValue().getId())) {
+                user = mapStorage.get(entry.getKey());
+            }
+        }
+        return user;
     }
 }

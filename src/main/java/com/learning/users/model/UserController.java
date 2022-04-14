@@ -3,10 +3,8 @@ package com.learning.users.model;
 import com.learning.users.repository.UserRepositoryInMemory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @SpringBootApplication
@@ -25,10 +23,31 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> list(@RequestParam(value = "active") boolean active,
-                                          @RequestParam(value = "limitToList") int limitToList,
-                                          @RequestParam(value = "name", defaultValue = "") String name){
-        return new ResponseEntity<>(userRepositoryInMemory.list(active, limitToList, name), HttpStatus.OK);
+    public List<User> display(@RequestParam(value = "active") boolean active,
+                                           @RequestParam(value = "limitToList") int limitToList,
+                                           @RequestParam(value = "name", defaultValue = "") String name){
+        return userRepositoryInMemory.list(active, limitToList, name);
 
+    }
+
+    @PutMapping("/user/{id}")
+    public User replace(@RequestBody User user, @PathVariable int id){
+
+        User userUpd = new User();
+
+        try{
+            userUpd = userRepositoryInMemory.searchById(id);
+            userUpd.setName(user.getName());
+            userUpd.setLastName(user.getLastName());
+            userUpd.setEmail(user.getEmail());
+            userUpd.setDateOfBirth(user.getDateOfBirth());
+            userUpd.setPhone(user.getPhone());
+            userUpd.setGitHubProfile(user.getGitHubProfile());
+            userRepositoryInMemory.update(userUpd);
+        }
+        catch(UserNotFoundException unfe){
+            System.out.println(unfe.getMessage());
+        }
+        return userUpd;
     }
 }

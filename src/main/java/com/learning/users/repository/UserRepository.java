@@ -2,6 +2,7 @@ package com.learning.users.repository;
 
 import com.learning.users.model.User;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
@@ -16,5 +17,7 @@ public interface UserRepository {
     int count();
 
     List<User> list(boolean active, int limitToList, String name);
+
+    User searchById(int id);
 
 }
