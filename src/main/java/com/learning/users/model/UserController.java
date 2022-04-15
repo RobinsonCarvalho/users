@@ -5,6 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.management.openmbean.InvalidKeyException;
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -19,14 +23,24 @@ public class UserController {
 
     @PostMapping("/user/add")
     public void add(@RequestBody User user){
+
         userRepositoryInMemory.create(user);
+
     }
 
     @GetMapping("/user")
     public List<User> display(@RequestParam(value = "active") boolean active,
-                                           @RequestParam(value = "limitToList") int limitToList,
-                                           @RequestParam(value = "name", defaultValue = "") String name){
+                              @RequestParam(value = "limitToList") int limitToList,
+                              @RequestParam(value = "name", defaultValue = "") String name){
+
         return userRepositoryInMemory.list(active, limitToList, name);
+
+    }
+
+    @GetMapping("/user/{id}")
+    public User displayById(@PathVariable int id){
+
+        return userRepositoryInMemory.searchById(id);
 
     }
 
@@ -34,15 +48,22 @@ public class UserController {
     public User replace(@RequestBody User user, @PathVariable int id){
 
         User userUpd = new User();
-
-            userUpd = userRepositoryInMemory.searchById(id);
-            userUpd.setName(user.getName());
-            userUpd.setLastName(user.getLastName());
-            userUpd.setEmail(user.getEmail());
-            userUpd.setDateOfBirth(user.getDateOfBirth());
-            userUpd.setPhone(user.getPhone());
-            userUpd.setGitHubProfile(user.getGitHubProfile());
-            userRepositoryInMemory.update(userUpd);
-            return userUpd;
+        userUpd = userRepositoryInMemory.searchById(id);
+        userUpd.setName(user.getName());
+        userUpd.setLastName(user.getLastName());
+        userUpd.setEmail(user.getEmail());
+        userUpd.setDateOfBirth(user.getDateOfBirth());
+        userUpd.setPhone(user.getPhone());
+        userUpd.setGitHubProfile(user.getGitHubProfile());
+        userRepositoryInMemory.update(userUpd);
+        return userUpd;
     }
+
+    @DeleteMapping("/user/")
+    public void erase(@RequestBody User user){
+
+        userRepositoryInMemory.delete(user);
+
+    }
+
 }

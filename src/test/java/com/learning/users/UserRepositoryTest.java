@@ -76,8 +76,8 @@ public class UserRepositoryTest {
     void shouldUpdateDataFromTheUser() {
 
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
-        User user = new User();
 
+        User user = new User();
         user.setName("John");
         user.setLastName("Miller");
         user.setEmail("jmiller@gmail.com");
@@ -156,6 +156,7 @@ public class UserRepositoryTest {
     void shouldThrowExceptionWhenUserForDeletionNotFound(){
 
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+
         User user = new User();
         user.setName("John");
         user.setLastName("Miller");
@@ -165,13 +166,16 @@ public class UserRepositoryTest {
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
         userRepositoryInMemory.create(user);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
-                        () -> {
-                            user.setId(2);
-                            userRepositoryInMemory.delete(user);
-                        }
-        );
+        User userDel = new User();
+        userDel.setName("Richard");
+        userDel.setLastName("Berman");
+        userDel.setEmail("rberman@gmail.com");
+        userDel.setDateOfBirth(LocalDate.of(1980, 2, 29));
+        userDel.setPhone("+353834778295");
+        userDel.setGitHubProfile("http://www.linkedin.com/rberman");
+        userDel.setId(3);
 
+        Assertions.assertThrows(UserNotFoundException.class, () -> userRepositoryInMemory.delete(userDel));
     }
 
     @Test
@@ -187,15 +191,13 @@ public class UserRepositoryTest {
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
         userRepositoryInMemory.create(user);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () ->{
-                    User userCheck = new User();
-                    userCheck.setId(22);
-                    userCheck.setEmail("jmiller@gmail.com");
-                    userRepositoryInMemory.delete(userCheck);
-                }
-        );
+        User userCheck = new User();
+        userCheck.setId(22);
+        userCheck.setEmail("jmiller@gmail.com");
 
+        Assertions.assertThrows(UserNotFoundException.class,
+                () -> userRepositoryInMemory.delete(userCheck)
+        );
     }
 
     @Test
@@ -266,7 +268,7 @@ public class UserRepositoryTest {
         userToUpdate.setPhone("+0000000000000");
         userToUpdate.setGitHubProfile("http://www.linkedin.com/jmiller");
 
-        Assertions.assertThrows(NullPointerException.class,
+        Assertions.assertThrows(UserNotFoundException.class,
                 () -> userRepositoryInMemory.update(userToUpdate)
         );
     }
@@ -561,6 +563,6 @@ public class UserRepositoryTest {
         userC.setGitHubProfile("http://www.linledin.com/brucetwant/");
         userRepositoryInMemory.create(userC);
 
-        Assertions.assertTrue(userRepositoryInMemory.searchById(2).getName().equals("Mary"));
+        Assertions.assertEquals("Mary", userRepositoryInMemory.searchById(2).getName());
     }
 }

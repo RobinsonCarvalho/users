@@ -44,40 +44,43 @@ public class UserRepositoryInMemory implements UserRepository{
     public void update(User user){
 
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
-
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
         }
-
-        if(user.getId() == mapStorage.get(user.getId()).getId()) {
-
-            User userUpd = mapStorage.get(user.getId());
-            userUpd.setUpdatedAt(LocalDateTime.now());
-            mapStorage.replace(userUpd.getId(), user, userUpd);
-            System.out.println("User data updated successfully.");
-        }
-        else{
+        else if(searchById(user.getId()) == null){
             throw new UserNotFoundException(user.getId());
         }
+
+        User userUpd = searchById(user.getId());
+        userUpd.setUpdatedAt(LocalDateTime.now());
+        mapStorage.replace(userUpd.getId(), user, userUpd);
+        System.out.println("User data updated successfully.");
     }
 
     @Override
     public void delete(User user){
 
-        if(!mapStorage.containsKey(user.getId())) {
-            throw new InvalidKeyException();
+        User userDelete = searchById(user.getId());
+
+        if(userDelete == null){
+            throw new NullPointerException();
         }
-        else if(user.getId() != mapStorage.get(user.getId()).getId()){
+        else if(userDelete.getDeletedAt() != null){
             throw new IllegalArgumentException();
         }
-        else if(mapStorage.get(user.getId()).getDeletedAt() != null){
-            throw new IllegalArgumentException();
-        }
+        //        if(mapStorage.get(user.getId()) == null){
+//            throw new NullPointerException();
+//        }
+//        else if(user.getId() != mapStorage.get(user.getId()).getId()){
+//            throw new UserNotFoundException(user.getId());
+//        }
+//        else if(mapStorage.get(user.getId()).getDeletedAt() != null){
+//            throw new IllegalArgumentException();
+//        }
 
         user.setDeletedAt(LocalDateTime.now());
         mapStorage.replace(user.getId(), user);
-        System.out.println("User " + user.getId() + " was deleted successfully.");
-
+        System.out.println("User " + user.getEmail() + " was deleted successfully.");
     }
 
     @Override
@@ -149,8 +152,11 @@ public class UserRepositoryInMemory implements UserRepository{
 
         User user = new User();
 
-        if(mapStorage.values().stream().filter(u -> u.getId() == id).count() == 0){
+        if(mapStorage.size() == 0){
             throw new UserNotFoundException(id);
+        }
+        else if(!mapStorage.values().stream().anyMatch(user1 -> user1.getId() == id)){
+            throw new UserNotFoundException(user.getId());
         }
 
         for (Map.Entry<Integer, User> entry : mapStorage.entrySet()) {
