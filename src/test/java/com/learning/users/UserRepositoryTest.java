@@ -1,6 +1,7 @@
 package com.learning.users;
 
 import com.learning.users.model.User;
+import com.learning.users.model.UserNotFoundException;
 import com.learning.users.repository.UserRepositoryInMemory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -509,4 +510,57 @@ public class UserRepositoryTest {
         );
     }
 
+    @Test
+    void shouldThrowExceptionWhenUserNotFound(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+
+        User user = new User();
+        user.setName("John");
+        user.setLastName("Miller");
+        user.setEmail("jmiller@gmail.com");
+        user.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        user.setPhone("+353834178265");
+        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(user);
+
+       Assertions.assertThrows(UserNotFoundException.class,
+               () -> userRepositoryInMemory.searchById(25)
+       );
+    }
+
+    @Test
+    void shouldDisplayCorrectUserById(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+
+        User userA = new User();
+        userA.setName("John");
+        userA.setLastName("Miller");
+        userA.setEmail("jmiller@gmail.com");
+        userA.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userA.setPhone("+353834178265");
+        userA.setGitHubProfile("http://www.linkedin.com/jmiller");
+        userRepositoryInMemory.create(userA);
+
+        User userB = new User();
+        userB.setName("Mary");
+        userB.setLastName("Gordon");
+        userB.setEmail("emailinexistent@test.com");
+        userB.setDateOfBirth(LocalDate.of(1988, 9, 15));
+        userB.setPhone("+353834178826");
+        userB.setGitHubProfile("http://www.linkedin.com/marygordon");
+        userRepositoryInMemory.create(userB);
+
+        User userC = new User();
+        userC.setName("Bruce");
+        userC.setLastName("Twant");
+        userC.setEmail("anthony@gmail.com");
+        userC.setDateOfBirth(LocalDate.of(1975,12, 30));
+        userC.setPhone("+353838547265");
+        userC.setGitHubProfile("http://www.linledin.com/brucetwant/");
+        userRepositoryInMemory.create(userC);
+
+        Assertions.assertTrue(userRepositoryInMemory.searchById(2).getName().equals("Mary"));
+    }
 }

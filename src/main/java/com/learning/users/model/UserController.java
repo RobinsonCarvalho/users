@@ -35,7 +35,6 @@ public class UserController {
 
         User userUpd = new User();
 
-        try{
             userUpd = userRepositoryInMemory.searchById(id);
             userUpd.setName(user.getName());
             userUpd.setLastName(user.getLastName());
@@ -44,10 +43,6 @@ public class UserController {
             userUpd.setPhone(user.getPhone());
             userUpd.setGitHubProfile(user.getGitHubProfile());
             userRepositoryInMemory.update(userUpd);
-        }
-        catch(UserNotFoundException unfe){
-            System.out.println(unfe.getMessage());
-        }
-        return userUpd;
+            return userUpd;
     }
 }

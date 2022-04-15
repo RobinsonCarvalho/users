@@ -2,7 +2,10 @@ package com.learning.users;
 
 import com.learning.users.model.User;
 import com.learning.users.model.UserController;
+import com.learning.users.model.UserNotFoundException;
+import com.learning.users.repository.UserRepositoryInMemory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,6 +73,27 @@ public class UserControllerTest  {
         userUpd.setGitHubProfile("http://www.linkedin.com/reynoldoshean");
 
         this.testRestTemplate.put("http://localhost:" + this.port + "/user/1", userUpd);
+
+    }
+
+    @Disabled
+    @Test
+    void shouldThrowExceptionIfUserIdParameterNotFound(){
+
+        UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+
+        Assertions.assertThrows(UserNotFoundException.class,
+                () -> {
+                        User user = new User();
+                        user.setName("John");
+                        user.setLastName("Miller");
+                        user.setEmail("jmiller@gmail.com");
+                        user.setDateOfBirth(LocalDate.of(1988, 9, 15));
+                        user.setPhone("+353834178265");
+                        user.setGitHubProfile("http://www.linkedin.com/jmiller");
+                        this.testRestTemplate.put("http://localhost:" + this.port + "/user/5", user);
+                }
+        );
 
     }
 

@@ -57,7 +57,7 @@ public class UserRepositoryInMemory implements UserRepository{
             System.out.println("User data updated successfully.");
         }
         else{
-            throw new NullPointerException();
+            throw new UserNotFoundException(user.getId());
         }
     }
 
@@ -147,15 +147,16 @@ public class UserRepositoryInMemory implements UserRepository{
     @Override
     public User searchById(int id){
 
-        if(mapStorage.values().stream().filter(user -> user.getId() == id).count() == 0){
+        User user = new User();
+
+        if(mapStorage.values().stream().filter(u -> u.getId() == id).count() == 0){
             throw new UserNotFoundException(id);
         }
 
-        User user = new User();
-
         for (Map.Entry<Integer, User> entry : mapStorage.entrySet()) {
-            if (entry.getKey().equals(entry.getValue().getId())) {
+            if (entry.getValue().getId() == id) {
                 user = mapStorage.get(entry.getKey());
+                break;
             }
         }
         return user;
