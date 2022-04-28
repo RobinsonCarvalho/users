@@ -68,15 +68,6 @@ public class UserRepositoryInMemory implements UserRepository{
         else if(userDelete.getDeletedAt() != null){
             throw new IllegalArgumentException();
         }
-        //        if(mapStorage.get(user.getId()) == null){
-//            throw new NullPointerException();
-//        }
-//        else if(user.getId() != mapStorage.get(user.getId()).getId()){
-//            throw new UserNotFoundException(user.getId());
-//        }
-//        else if(mapStorage.get(user.getId()).getDeletedAt() != null){
-//            throw new IllegalArgumentException();
-//        }
 
         user.setDeletedAt(LocalDateTime.now());
         mapStorage.replace(user.getId(), user);
@@ -155,7 +146,7 @@ public class UserRepositoryInMemory implements UserRepository{
         if(mapStorage.size() == 0){
             throw new UserNotFoundException(id);
         }
-        else if(!mapStorage.values().stream().anyMatch(user1 -> user1.getId() == id)){
+        else if(mapStorage.values().stream().noneMatch(user1 -> user1.getId() == id)){
             throw new UserNotFoundException(user.getId());
         }
 

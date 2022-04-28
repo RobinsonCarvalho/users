@@ -3,32 +3,18 @@ package com.learning.users;
 import com.learning.users.model.User;
 import com.learning.users.model.UserController;
 import com.learning.users.model.UserNotFoundException;
-import com.learning.users.repository.UserRepositoryInMemory;
-import org.apache.tomcat.jni.Status;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
-
-import javax.management.openmbean.InvalidKeyException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 
 @SpringBootTest(classes = UserController.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest  {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
     private UserController userController;
-
-    @Autowired
-    final TestRestTemplate testRestTemplate = new TestRestTemplate();
 
     @Test
     public void shouldEnsureApplicationIsRunning(){
@@ -49,11 +35,8 @@ public class UserControllerTest  {
 
             Assertions.assertDoesNotThrow(() -> userController.add(user));
         }
-        catch (ConstraintViolationException cve){
+        catch (ConstraintViolationException | IllegalArgumentException cve){
             System.out.println(cve.getMessage());
-        }
-        catch (IllegalArgumentException iae){
-            System.out.println(iae.getMessage());
         }
     }
 
@@ -81,16 +64,9 @@ public class UserControllerTest  {
             userController.add(user);
             userController.replace(userUpd, user.getId());
         }
-        catch (ConstraintViolationException cve){
+        catch (ConstraintViolationException | UserNotFoundException | IllegalArgumentException cve){
             System.out.println(cve.getMessage());
         }
-        catch (UserNotFoundException unfe){
-            System.out.println(unfe.getMessage());
-        }
-        catch (IllegalArgumentException iae){
-            System.out.println(iae.getMessage());
-        }
-
 
     }
 
@@ -120,15 +96,9 @@ public class UserControllerTest  {
             userController.add(user);
 
             Assertions.assertDoesNotThrow( () -> userController.erase(user));
-
         }
-        catch (UserNotFoundException unfe){
+        catch (UserNotFoundException | IllegalArgumentException unfe){
             System.out.println(unfe.getMessage());
         }
-        catch (IllegalArgumentException iae){
-            System.out.println(iae.getMessage());
-        }
-
     }
-
 }
