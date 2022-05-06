@@ -3,12 +3,7 @@ package com.learning.users.model;
 import com.learning.users.repository.UserRepositoryInMemory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.management.openmbean.InvalidKeyException;
-import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -47,8 +42,7 @@ public class UserController {
     @PutMapping("/user/{id}")
     public User replace(@RequestBody User user, @PathVariable int id){
 
-        User userUpd = new User();
-        userUpd = userRepositoryInMemory.searchById(id);
+        User userUpd = userRepositoryInMemory.searchById(id);
         userUpd.setName(user.getName());
         userUpd.setLastName(user.getLastName());
         userUpd.setEmail(user.getEmail());
