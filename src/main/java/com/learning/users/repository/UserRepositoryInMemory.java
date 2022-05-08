@@ -109,8 +109,7 @@ public class UserRepositoryInMemory implements UserRepository{
 
         if(!active){
             if(name.length() == 0) {
-                listOfUser = mapStorage.values().stream()
-                        .collect(Collectors.toList());
+                listOfUser = new ArrayList<>(mapStorage.values());
             }
             else{
                 listOfUser = mapStorage.values().stream()
