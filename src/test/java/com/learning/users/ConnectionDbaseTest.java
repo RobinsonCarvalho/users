@@ -14,7 +14,8 @@ public class ConnectionDbaseTest {
     @Test
     void shouldConnectToDatabase() throws Exception {
 
-        connectionDBase = new ConnectionDBase();
+        String url = "jdbc:mysql://localhost:3306/store?user=root&password=Administrator1983";
+        connectionDBase = new ConnectionDBase(url);
         conn = connectionDBase.connect();
         Assertions.assertNotNull(conn);
 
@@ -23,8 +24,8 @@ public class ConnectionDbaseTest {
     @Test
     void shouldThrowSQLExceptionWhenConnectionNull(){
 
-        String url = "jdbc:mysql://localhost:3306/store?user=Any&password=0";
-        connectionDBase = new ConnectionDBase();
+        String url = "jdbc:mysql://localhost:3306/store?user=&password=";
+        connectionDBase = new ConnectionDBase(url);
 
         Assertions.assertThrows(SQLException.class,
                 ()-> connectionDBase.connect());

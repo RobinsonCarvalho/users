@@ -6,8 +6,8 @@ public class ConnectionDBase {
 
     private String url;
 
-    public ConnectionDBase() {
-        this.url = "jdbc:mysql://localhost:3306/store?user=root&password=Administrator1983";
+    public ConnectionDBase(String url) {
+        this.url = url;
     }
 
     public Connection connect() throws ClassNotFoundException, SQLException {
