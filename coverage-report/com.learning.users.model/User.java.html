@@ -2,12 +2,10 @@
 
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
-import org.hibernate.validator.constraints.UniqueElements;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-<span class="fc" id="L10">public class User {</span>
+<span class="fc" id="L8">public class User {</span>
 
     private int id;
 
@@ -41,76 +39,76 @@ import java.time.LocalDateTime;
     private LocalDateTime deletedAt;
 
     public int getId() {
-<span class="fc" id="L44">        return id;</span>
+<span class="fc" id="L42">        return id;</span>
     }
 
     public void setId(int id) {
-<span class="fc" id="L48">        this.id = id;</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L46">        this.id = id;</span>
+<span class="fc" id="L47">    }</span>
 
     public String getName() {
-<span class="fc" id="L52">        return name;</span>
+<span class="fc" id="L50">        return name;</span>
     }
 
     public void setName(String name) {
-<span class="fc" id="L56">        this.name = name;</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L54">        this.name = name;</span>
+<span class="fc" id="L55">    }</span>
 
     public String getLastName() {
-<span class="fc" id="L60">        return lastName;</span>
+<span class="fc" id="L58">        return lastName;</span>
     }
 
     public void setLastName(String lastName) {
-<span class="fc" id="L64">        this.lastName = lastName;</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L62">        this.lastName = lastName;</span>
+<span class="fc" id="L63">    }</span>
 
     public String getEmail() {
-<span class="fc" id="L68">        return email;</span>
+<span class="fc" id="L66">        return email;</span>
     }
 
     public void setEmail(String email) {
-<span class="fc" id="L72">        this.email = email;</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L70">        this.email = email;</span>
+<span class="fc" id="L71">    }</span>
 
     public LocalDate getDateOfBirth() {
-<span class="fc" id="L76">        return dateOfBirth;</span>
+<span class="fc" id="L74">        return dateOfBirth;</span>
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
-<span class="fc" id="L80">        this.dateOfBirth = dateOfBirth;</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L78">        this.dateOfBirth = dateOfBirth;</span>
+<span class="fc" id="L79">    }</span>
 
     public String getPhone() {
-<span class="fc" id="L84">        return phone;</span>
+<span class="fc" id="L82">        return phone;</span>
     }
 
     public void setPhone(String phone) {
-<span class="fc" id="L88">        this.phone = phone;</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L86">        this.phone = phone;</span>
+<span class="fc" id="L87">    }</span>
 
     public String getGitHubProfile() {
-<span class="fc" id="L92">        return gitHubProfile;</span>
+<span class="fc" id="L90">        return gitHubProfile;</span>
     }
 
     public void setGitHubProfile(String gitHubProfile) {
-<span class="fc" id="L96">        this.gitHubProfile = gitHubProfile;</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L94">        this.gitHubProfile = gitHubProfile;</span>
+<span class="fc" id="L95">    }</span>
 
     public LocalDateTime getUpdatedAt() {
-<span class="fc" id="L100">        return updatedAt;</span>
+<span class="fc" id="L98">        return updatedAt;</span>
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
-<span class="fc" id="L104">        this.updatedAt = updatedAt;</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L102">        this.updatedAt = updatedAt;</span>
+<span class="fc" id="L103">    }</span>
 
     public LocalDateTime getDeletedAt() {
-<span class="fc" id="L108">        return deletedAt;</span>
+<span class="fc" id="L106">        return deletedAt;</span>
     }
 
     public void setDeletedAt(LocalDateTime deletedAt) {
-<span class="fc" id="L112">        this.deletedAt = deletedAt;</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L110">        this.deletedAt = deletedAt;</span>
+<span class="fc" id="L111">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
