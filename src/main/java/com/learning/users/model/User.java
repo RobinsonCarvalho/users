@@ -1,16 +1,42 @@
 package com.learning.users.model;
 
-import java.util.Date;
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class User {
 
     private int id;
+
+    @NotEmpty(message = "Define valid name")
+    @NotBlank(message = "Name cannot be blank")
+    @Size(min = 3, max = 50, message = "Name has to have between 3 and 50 characters.")
     private String name;
+
+    @NotEmpty(message = "Define valid surname")
+    @NotBlank(message = "Last name cannot be blank")
+    @Size(min = 3, max = 50, message = "Last name has to have between 3 and 50 characters.")
     private String lastName;
+
+    @Email(message = "Email was not identified as a valid one." )
     private String email;
-    private Date dateOfBirth;
-    private long phone;
+
+    @Past(message = "Past date should be informed in this field.")
+    private LocalDate dateOfBirth;
+
+    @NotBlank(message = "One phone number has to be informed")
+    @Size(min = 13, max = 16, message = "Phone number should be in the format: +DDI DDD Phone Number")
+    private String phone;
+
+    @URL(message = "The GitHub profile informed could not be verified as a valid one")
     private String gitHubProfile;
+
+    @PastOrPresent
+    private LocalDateTime updatedAt;
+
+    @PastOrPresent
+    private LocalDateTime deletedAt;
 
     public int getId() {
         return id;
@@ -44,19 +70,19 @@ public class User {
         this.email = email;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -66,6 +92,22 @@ public class User {
 
     public void setGitHubProfile(String gitHubProfile) {
         this.gitHubProfile = gitHubProfile;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
 }

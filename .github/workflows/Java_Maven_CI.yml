@@ -1,8 +1,8 @@
 name: Java CI
 
-on: 
-    push
-    
+on:
+  push
+
 jobs:
   verify:			
     runs-on: windows-latest
