@@ -2,10 +2,7 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ resource/create-integration-docker-git ]
-  pull_request:
-    branches: [ resource/create-integration-docker-git ]
+  push
 
 jobs:
   docker:
