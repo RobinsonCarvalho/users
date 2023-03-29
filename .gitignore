@@ -1,7 +1,7 @@
 target/
-coverage-report/
 .classpath
 .project
 .settings/
 .idea/
 .github/
+coverage-report/
