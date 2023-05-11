@@ -5,9 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -19,25 +18,12 @@ public class UserController {
     public static void main(String[] args){
 
         SpringApplication.run(UserController.class, args);
-        Connection cnx = null;
-
-        try {
-
-            cnx = DriverManager.getConnection("jdbc:mysql://localhost/dbmysql?" +
-                    "user=root&password=nosnibor1983root");
-
-
-        }
-        catch (SQLException sqlE){
-            System.out.println("Error trying to connect to database." + sqlE.getMessage());
-        }
     }
 
     @PostMapping("/user/add")
     public void add(@RequestBody User user){
 
         userRepositoryInMemory.create(user);
-
     }
 
     @GetMapping("/user")
@@ -46,20 +32,19 @@ public class UserController {
                               @RequestParam(value = "name", defaultValue = "") String name){
 
         return userRepositoryInMemory.list(active, limitToList, name);
-
     }
 
     @GetMapping("/user/{id}")
     public User displayById(@PathVariable int id){
 
-        return userRepositoryInMemory.searchById(id);
+        return userRepositoryInMemory.read(id);
 
     }
 
     @PutMapping("/user/{id}")
     public User replace(@RequestBody User user, @PathVariable int id){
 
-        User userUpd = userRepositoryInMemory.searchById(id);
+        User userUpd = userRepositoryInMemory.read(id);
         userUpd.setName(user.getName());
         userUpd.setLastName(user.getLastName());
         userUpd.setEmail(user.getEmail());
@@ -74,7 +59,6 @@ public class UserController {
     public void erase(@RequestBody User user){
 
         userRepositoryInMemory.delete(user);
-
     }
 
 }

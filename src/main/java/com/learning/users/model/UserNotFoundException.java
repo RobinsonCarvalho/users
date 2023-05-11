@@ -6,4 +6,7 @@ public class UserNotFoundException extends RuntimeException {
         super("The user id " + id + " could not be localized.");
     }
 
+    public UserNotFoundException (String email){
+        super("The user email " + email + " could not be localized.");
+    }
 }

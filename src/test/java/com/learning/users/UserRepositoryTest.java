@@ -5,7 +5,6 @@ import com.learning.users.model.UserNotFoundException;
 import com.learning.users.repository.UserRepositoryInMemory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import javax.management.openmbean.InvalidKeyException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,10 +13,13 @@ import java.util.ArrayList;
 
 public class UserRepositoryTest {
 
+    private User user;
+
     @Test
     void shouldCreateUser() {
 
         UserRepositoryInMemory userRepositoryInMemory = new UserRepositoryInMemory();
+
         User user = new User();
         user.setName("Reynold");
         user.setLastName("O'Shean");
@@ -25,8 +27,14 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(2000, 5, 2));
         user.setPhone("+353834185473");
         user.setGitHubProfile("http://www.linkedin.com");
-        userRepositoryInMemory.create(user);
+
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Assertions.assertEquals(1, userRepositoryInMemory.count());
+
     }
 
     @Test
@@ -57,7 +65,11 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1988, 9, 15));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         User newUser = new User();
         newUser.setName("Roy");
@@ -84,7 +96,11 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1988, 9, 15));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         user.setLastName("Miller Roosevelt");
         userRepositoryInMemory.update(user);
@@ -106,7 +122,11 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1955, 7, 30));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         user.setLastName("");
         Assertions.assertThrows(ConstraintViolationException.class,
                 () -> userRepositoryInMemory.update(user)
@@ -126,7 +146,7 @@ public class UserRepositoryTest {
         user.setPhone("+353834178826");
         user.setGitHubProfile("http://www.linkedin.com/marygordon");
 
-        Assertions.assertThrows(InvalidKeyException.class,
+        Assertions.assertThrows(UserNotFoundException.class,
                 () -> userRepositoryInMemory.read(user.getId())
         );
     }
@@ -142,11 +162,15 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1955, 7, 30));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         userRepositoryInMemory.delete(user);
 
-        Assertions.assertThrows(InvalidKeyException.class,
+        Assertions.assertThrows(UserNotFoundException.class,
                         () -> userRepositoryInMemory.read(user.getId())
         );
 
@@ -164,7 +188,11 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1955, 7, 30));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         User userDel = new User();
         userDel.setName("Richard");
@@ -189,7 +217,11 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1955, 7, 30));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         User userCheck = new User();
         userCheck.setId(22);
@@ -212,9 +244,13 @@ public class UserRepositoryTest {
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
         user.setDeletedAt(LocalDateTime.now());
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(UserNotFoundException.class,
                 () -> userRepositoryInMemory.delete(user)
         );
 
@@ -223,26 +259,35 @@ public class UserRepositoryTest {
     @Test
     void shouldGetUserData() {
 
+        int id;
         UserRepositoryInMemory userRepository = new UserRepositoryInMemory();
-        User user = new User();
+        user = new User();
         user.setName("Bruce");
         user.setLastName("Twant");
         user.setEmail("brucetwant@gmail.com");
         user.setDateOfBirth(LocalDate.of(1975, 12, 30));
         user.setPhone("+353838547265");
         user.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        userRepository.create(user);
 
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(1, user.getId()),
-                () -> Assertions.assertEquals("Bruce", user.getName()),
-                () -> Assertions.assertEquals("Twant", user.getLastName()),
-                () -> Assertions.assertEquals("brucetwant@gmail.com", user.getEmail()),
-                () -> Assertions.assertEquals(LocalDate.of(1975, 12, 30), user.getDateOfBirth()),
-                () -> Assertions.assertEquals("+353838547265", user.getPhone()),
-                () -> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
-        );
+        try {
+            userRepository.create(user);
+            id = user.getId();
+            user = null;
+            user = userRepository.read(id);
 
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(1, user.getId()),
+                    () -> Assertions.assertEquals("Bruce", user.getName()),
+                    () -> Assertions.assertEquals("Twant", user.getLastName()),
+                    () -> Assertions.assertEquals("brucetwant@gmail.com", user.getEmail()),
+                    () -> Assertions.assertEquals(LocalDate.of(1975, 12, 30), user.getDateOfBirth()),
+                    () -> Assertions.assertEquals("+353838547265", user.getPhone()),
+                    () -> Assertions.assertEquals("http://www.linledin.com/brucetwant/", user.getGitHubProfile())
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -257,7 +302,11 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1988, 9, 15));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         User userToUpdate = new User();
         userToUpdate.setId(100);
@@ -334,7 +383,11 @@ public class UserRepositoryTest {
         listOfUsers.add(userF);
 
         for(User user : listOfUsers){
-            userRepositoryInMemory.create(user);
+            try {
+                userRepositoryInMemory.create(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Assertions.assertEquals(2, userRepositoryInMemory.list(false, 10, "Jo").size());
@@ -403,7 +456,11 @@ public class UserRepositoryTest {
         listOfUser.add(userB3);
 
         for(User user : listOfUser){
-            userRepositoryInMemory.create(user);
+            try {
+                userRepositoryInMemory.create(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Assertions.assertAll(
@@ -485,7 +542,11 @@ public class UserRepositoryTest {
         listOfUser.add(userB3);
 
         for(User user : listOfUser){
-            userRepositoryInMemory.create(user);
+            try {
+                userRepositoryInMemory.create(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Assertions.assertThrows(IllegalArgumentException.class,
@@ -524,10 +585,14 @@ public class UserRepositoryTest {
         user.setDateOfBirth(LocalDate.of(1988, 9, 15));
         user.setPhone("+353834178265");
         user.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(user);
+        try {
+            userRepositoryInMemory.create(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-       Assertions.assertThrows(UserNotFoundException.class,
-               () -> userRepositoryInMemory.searchById(25)
+        Assertions.assertThrows(UserNotFoundException.class,
+               () -> userRepositoryInMemory.read(25)
        );
     }
 
@@ -543,7 +608,11 @@ public class UserRepositoryTest {
         userA.setDateOfBirth(LocalDate.of(1988, 9, 15));
         userA.setPhone("+353834178265");
         userA.setGitHubProfile("http://www.linkedin.com/jmiller");
-        userRepositoryInMemory.create(userA);
+        try {
+            userRepositoryInMemory.create(userA);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         User userB = new User();
         userB.setName("Mary");
@@ -552,7 +621,11 @@ public class UserRepositoryTest {
         userB.setDateOfBirth(LocalDate.of(1988, 9, 15));
         userB.setPhone("+353834178826");
         userB.setGitHubProfile("http://www.linkedin.com/marygordon");
-        userRepositoryInMemory.create(userB);
+        try {
+            userRepositoryInMemory.create(userB);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         User userC = new User();
         userC.setName("Bruce");
@@ -561,8 +634,12 @@ public class UserRepositoryTest {
         userC.setDateOfBirth(LocalDate.of(1975,12, 30));
         userC.setPhone("+353838547265");
         userC.setGitHubProfile("http://www.linledin.com/brucetwant/");
-        userRepositoryInMemory.create(userC);
+        try {
+            userRepositoryInMemory.create(userC);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        Assertions.assertEquals("Mary", userRepositoryInMemory.searchById(2).getName());
+        Assertions.assertEquals("Mary", userRepositoryInMemory.read(2).getName());
     }
 }

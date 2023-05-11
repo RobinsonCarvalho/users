@@ -5,18 +5,19 @@ import java.util.List;
 
 public interface UserRepository {
 
-    void create(User user);
+    void create(User user) throws Exception;
 
-    void update(User user);
+    void update(User user) throws Exception;
 
-    User read(int id);
+    User read(int id) throws Exception;
 
-    void delete(User user);
+    User read(String email) throws Exception;
 
-    int count();
+    void delete(User user) throws Exception;
 
-    List<User> list(boolean active, int limitToList, String name);
+    int count() throws Exception;
 
-    User searchById(int id);
+    List<User> list(boolean active, int limitToList, String name) throws Exception;
 
+    boolean findUser(int id) throws Exception;
 }

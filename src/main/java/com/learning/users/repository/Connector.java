@@ -6,31 +6,22 @@ import java.sql.SQLException;
 
 public class Connector {
 
-    private String url;
     private Connection conn;
-    private String userDb;
-    private String passwordDb;
+    private final String url = "jdbc:mysql://localhost:3306/store";
+    private final String userDb = "root";
+    private final String passwordDb = "Administrator1983";
 
     public Connector(){
-        url = "jdbc:mysql://localhost:3306/store";
+
         conn = null;
     }
 
-    public Connection connectDatabase(String userDb, String passwordDb) {
+    public Connection connectDatabase() throws Exception{
 
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, userDb, passwordDb);
-        }
-        catch (ClassNotFoundException cnf){
-            System.out.println("There was an issue loading the MySQL driver. " + cnf.getMessage());
-        }
-        catch (SQLException se){
-            System.out.println("There was an issue connecting to database. " + se.getMessage());
-        }
-        finally {
-            return conn;
-        }
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(url, userDb, passwordDb);
+        return conn;
+
     }
 
 }

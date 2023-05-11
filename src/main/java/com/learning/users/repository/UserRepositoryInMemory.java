@@ -2,11 +2,9 @@ package com.learning.users.repository;
 
 import com.learning.users.model.User;
 import com.learning.users.model.UserNotFoundException;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
-import javax.management.openmbean.InvalidKeyException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,9 +25,7 @@ public class UserRepositoryInMemory implements UserRepository{
         Set<ConstraintViolation<User>> violations = VALIDATOR.validate(user);
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
-        }else if(mapStorage.containsKey(user.getId())){
-            throw new IllegalArgumentException();
-        }else if(mapStorage.values().stream()
+        }else if (mapStorage.values().stream()
                 .anyMatch(store -> store.getEmail().equals(user.getEmail()))){
             throw new IllegalArgumentException();
         }
@@ -38,6 +34,7 @@ public class UserRepositoryInMemory implements UserRepository{
         user.setId(idUser);
         mapStorage.put(user.getId(), user);
         System.out.println("User created successfully.");
+
     }
 
     @Override
@@ -47,11 +44,11 @@ public class UserRepositoryInMemory implements UserRepository{
         if(!violations.isEmpty()){
             throw new ConstraintViolationException(violations);
         }
-        else if(searchById(user.getId()) == null){
+        else if(!read(user.getId()).equals(user)){
             throw new UserNotFoundException(user.getId());
         }
 
-        User userUpd = searchById(user.getId());
+        User userUpd = read(user.getId());
         userUpd.setUpdatedAt(LocalDateTime.now());
         mapStorage.replace(userUpd.getId(), user, userUpd);
         System.out.println("User data updated successfully.");
@@ -60,9 +57,9 @@ public class UserRepositoryInMemory implements UserRepository{
     @Override
     public void delete(User user){
 
-        User userDelete = searchById(user.getId());
+        User userDelete = read(user.getId());
 
-        if(userDelete == null){
+        if(!userDelete.equals(user)){
             throw new NullPointerException();
         }
         else if(userDelete.getDeletedAt() != null){
@@ -77,12 +74,27 @@ public class UserRepositoryInMemory implements UserRepository{
     @Override
     public User read(int id){
 
-        if(!mapStorage.containsKey(id)
-                || mapStorage.get(id).getDeletedAt() != null){
-
-            throw new InvalidKeyException();
+        if(!mapStorage.containsKey(id) || mapStorage.get(id).getDeletedAt() != null){
+            throw new UserNotFoundException(id);
         }
         return mapStorage.get(id);
+    }
+
+    @Override
+    public User read(String email){
+
+        User user = new User();
+
+        if(mapStorage.size() == 0){
+            throw new UserNotFoundException(email);
+        }
+        else if(mapStorage.values().stream().noneMatch(user1 -> user1.getEmail().equals(email))){
+            throw new UserNotFoundException(user.getEmail());
+        }
+
+        return mapStorage.get(mapStorage.values().stream().anyMatch(
+                usr -> usr.getEmail().equals(email)));
+
     }
 
     @Override
@@ -107,7 +119,7 @@ public class UserRepositoryInMemory implements UserRepository{
 
         List<User> listOfUser;
 
-        if(!active){
+       if(!active){
             if(name.length() == 0) {
                 listOfUser = new ArrayList<>(mapStorage.values());
             }
@@ -138,23 +150,9 @@ public class UserRepositoryInMemory implements UserRepository{
     }
 
     @Override
-    public User searchById(int id){
+    public boolean findUser(int idUser){
 
-        User user = new User();
+        return mapStorage.containsKey(idUser);
 
-        if(mapStorage.size() == 0){
-            throw new UserNotFoundException(id);
-        }
-        else if(mapStorage.values().stream().noneMatch(user1 -> user1.getId() == id)){
-            throw new UserNotFoundException(user.getId());
-        }
-
-        for (Map.Entry<Integer, User> entry : mapStorage.entrySet()) {
-            if (entry.getValue().getId() == id) {
-                user = mapStorage.get(entry.getKey());
-                break;
-            }
-        }
-        return user;
     }
 }

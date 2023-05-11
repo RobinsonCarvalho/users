@@ -27,7 +27,7 @@ public class UserControllerTest  {
         try{
             User user = new User();
             user.setName("Reynold");
-            user.setLastName("O'Shean");
+            user.setLastName("O'Sean");
             user.setEmail("reynoldosheangusmao@gmail.com");
             user.setDateOfBirth(LocalDate.of(2000, 5, 2));
             user.setPhone("+353834185473");
@@ -47,7 +47,7 @@ public class UserControllerTest  {
         try{
             User user = new User();
             user.setName("Reynold");
-            user.setLastName("O'Shean");
+            user.setLastName("O'Sean");
             user.setEmail("reynold.oshean.gusmao@gmail.com");
             user.setDateOfBirth(LocalDate.of(2000, 5, 2));
             user.setPhone("+353834185473");
@@ -55,7 +55,7 @@ public class UserControllerTest  {
 
             User userUpd = new User();
             userUpd.setName("Reynold");
-            userUpd.setLastName("O'Shean");
+            userUpd.setLastName("O'Sean");
             userUpd.setEmail("reynoldoshean@gmail.com");
             userUpd.setDateOfBirth(LocalDate.of(2000, 5, 2));
             userUpd.setPhone("+353000000000");
